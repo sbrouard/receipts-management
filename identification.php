@@ -11,13 +11,13 @@
 
 <h2>Identification</h2>
 
-// Formulaire d'identification
+
 <form method="post" action="identification.php">
 <label for="pseudo">Enter votre pseudo: </label><input type="text" name="pseudo" id="pseudo" placeholder="pseudo" /> <br />
 <input type="submit" value="M'identifier" />
 </form>
 
-// traitement du formulaire d'inscription
+
 <?php 
 if (isset($_POST['pseudo'])){ // si on recoit un formulaire complété
 
