@@ -25,13 +25,13 @@ J'ai aussi créé un index.php et essayé de me connecté à la base, mais j'ai 
 
 Pages à écrire:
 - inscription
-- identification
+-OK identification
 - affichage d'une recette
 - affichage d'un menu
-- liste des recettes (avec recettes cliquables)
+-OK liste des recettes (avec recettes cliquables)
 - liste des menus (avec menus cliquables)
 - formulaire ajouter menu, recette
-- index.php (lien vers liste recettes/menus, inscription/identification) [pour l'utilisateur lambda]
-- page accueil.php(lien vers liste recettes/menus, ajouter recette/menu, mon compte) [pour l'utilisateur authentifié]
+-OK index.php (lien vers liste recettes/menus, inscription/identification) [pour l'utilisateur lambda]
+-OK page accueil.php(lien vers liste recettes/menus, ajouter recette/menu, mon compte) [pour l'utilisateur authentifié]
 - mon compte (modif mes infos (direct sur la page), mes recettes(lien), mes menus(lien))
 - ouvrir base de donnees (fichier à inclure au début de  chaque fichier php)
