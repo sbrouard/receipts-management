@@ -11,14 +11,14 @@
 
 <h2>Inscription</h2>
 
-// Formulaire d'inscription
+<!-- Formulaire d'inscription -->
 <form method="post" action="inscription.php">
 <label for="pseudo">Enter votre pseudo: </label><input type="text" name="pseudo" id="pseudo" placeholder="pseudo" /> <br />
 <input type="submit" value="M'inscrire" />
 </form>
 
 
-// traitement du formulaire d'inscription
+<!-- traitement du formulaire d'inscription -->
 <?php 
 if (isset($_POST['pseudo'])){ // si on recoit un formulaire complété
 
@@ -33,7 +33,7 @@ if (isset($_POST['pseudo'])){ // si on recoit un formulaire complété
 
 	// Si le pseudo est disponible
 	else{
-		$bdd->exec('INSERT INTO Internaute(pseudo) VALUES($_POST[\'pseudo\'])');
+		$bdd->exec('INSERT INTO Internaute(pseudo) VALUES("'. $_POST['pseudo'] . '")');
 		echo "Inscription validée";
 	}
 }
