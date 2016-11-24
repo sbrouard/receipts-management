@@ -12,10 +12,12 @@
 
 <?php 
 // On récupère le contenu de la table Recettes_de cuisine
-$recettes = $bdd->query('SELECT * FROM Recettes_de_cuisine');
+$recettes = $bdd->query('SELECT nom_recette FROM Recettes_de_cuisine');
 //On affiche les lignes une à une:
 while ($rec = $recettes->fetch()){
-echo '<b>' . $rec['nom_recette'] .'</b> Temps de préparation: ' . $rec['temps_preparation'] . '  Temps de cuisson: ' . $rec['temps_cuisson'] .'<br>';
+
+echo '<p> <a href="liste_recettes.php?nomrecette='.$rec['nom_recette'].'">'. $rec['nom_recette'].'</a> </p>';
+//.'</b> Temps de préparation: ' . $rec['temps_preparation'] . '  Temps de cuisson: ' . $rec['temps_cuisson']
 }
 
 ?>
