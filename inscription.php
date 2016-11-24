@@ -34,7 +34,7 @@ if (isset($_POST['pseudo'])){ // si on recoit un formulaire complété
 	// Si le pseudo est disponible
 	else{
 		$bdd->exec('INSERT INTO Internaute(pseudo) VALUES("'. $_POST['pseudo'] . '")');
-		echo "Inscription validée";
+		echo "<br>Inscription validée.<br>";
 	}
 }
 ?>
