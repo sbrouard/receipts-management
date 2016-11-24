@@ -1,4 +1,5 @@
 J'ai pas compris pourquoi Maeva voulait un donnees. sql ...
+>> C'était parce que dans le cours, ils séparaient les deux: base.sql et donnees.sql mais du coup c'est bon !
 J'ai inséré les données directement depuis phpmyadmin
 
 Pour l'instant j'ai mis des données pour: (tout)
@@ -19,3 +20,16 @@ Pour l'instant j'ai mis des données pour: (tout)
 J'ai mis que 4 données dans chaque, mais on pourra en rajouter dans chaque, et de toutes façons on devra le faire pour tester nos requetes d'ajout sur le site.
 
 J'ai aussi créé un index.php et essayé de me connecté à la base, mais j'ai pas testé
+
+
+
+Pages à écrire:
+- inscription
+- affichage d'une recette
+- affichage d'un menu
+- liste des recettes (avec recettes cliquables)
+- liste des menus (avec menus cliquables)
+- formulaire ajouter menu, recette
+- page accueil/index.php (lien vers liste recettes/menus, ajouter recette/menu)
+- mon compte (modif mes infos (direct sur la page), mes recettes(lien), mes menus(lien))
+- ouvrir base de donnees (fichier à inclure au début de  chaque fichier php)
