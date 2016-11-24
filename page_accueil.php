@@ -10,8 +10,9 @@
 
 <p>Liste des recettes <a href="liste_recettes.php">liste_recettes</a> ?</p>
 <p>Liste des menus <a href="liste_menus.php">liste_menus</a> ?</p>
-<p>Inscription <a href="inscription.php">inscription</a> ?</p>
-<p>Identification <a href="identification.php">identification</a> ?</p>
+<p>Ajouter une recette <a href="ajouter_recette.php">ajouter_recette</a> ?</p>
+<p>Ajouter un menu <a href="ajouter_menu.php">ajouter_menu</a> ?</p>
+<p>Mon compte <a href="mon_compte.php">mon_compte</a> ?</p>
 
 </body>
 
