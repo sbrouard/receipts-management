@@ -25,6 +25,7 @@ J'ai aussi créé un index.php et essayé de me connecté à la base, mais j'ai 
 
 Pages à écrire:
 - inscription
+- identification
 - affichage d'une recette
 - affichage d'un menu
 - liste des recettes (avec recettes cliquables)
