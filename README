@@ -30,6 +30,7 @@ Pages à écrire:
 - liste des recettes (avec recettes cliquables)
 - liste des menus (avec menus cliquables)
 - formulaire ajouter menu, recette
-- page accueil/index.php (lien vers liste recettes/menus, ajouter recette/menu)
+- index.php (lien vers liste recettes/menus, inscription/identification) [pour l'utilisateur lambda]
+- page accueil.php(lien vers liste recettes/menus, ajouter recette/menu, mon compte) [pour l'utilisateur authentifié]
 - mon compte (modif mes infos (direct sur la page), mes recettes(lien), mes menus(lien))
 - ouvrir base de donnees (fichier à inclure au début de  chaque fichier php)
