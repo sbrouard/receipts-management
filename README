@@ -1,0 +1,21 @@
+J'ai pas compris pourquoi Maeva voulait un donnees. sql ...
+J'ai inséré les données directement depuis phpmyadmin
+
+Pour l'instant j'ai mis des données pour: (tout)
+-Appartenir_catégorie (il y a un accent dans celle là :o)
+-Avoir Caractéristiques
+-Caracteristiques_nutritionnelles
+-Categories
+-Commenter
+-Contenir_ingredients
+-Contenir_recette
+-Descriptions
+-Ingrédients
+-Internaute
+-Menu
+-Noter
+-Recettes_de_cuisine
+
+J'ai mis que 4 données dans chaque, mais on pourra en rajouter dans chaque, et de toutes façons on devra le faire pour tester nos requetes d'ajout sur le site.
+
+J'ai aussi créé un index.php et essayé de me connecté à la base, mais j'ai pas testé
