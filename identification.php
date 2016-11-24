@@ -27,7 +27,7 @@ if (isset($_POST['pseudo'])){ // si on recoit un formulaire complété
 
 	// Si le pseudo existe
 	if ($exists['pseudo_exists']){ 
-		header('Location: page_accueil.php');
+		header('Location: index.php');
  		  exit();
 	}
 
