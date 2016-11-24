@@ -8,10 +8,10 @@
 
 <body>
 
-<p>Liste des recettes <a href="liste_recettes.php">liste_recettes</a> ?</p>
-<p>Liste des menus <a href="liste_menus.php">liste_menus</a> ?</p>
-<p>Inscription <a href="inscription.php">inscription</a> ?</p>
-<p>Identification <a href="identification.php">identification</a> ?</p>
+<p> <a href="liste_recettes.php">Liste des recettes</a> </p>
+<p> <a href="liste_menus.php">Liste des menus</a> </p>
+<p> <a href="inscription.php">Inscription</a> </p>
+<p> <a href="identification.php">Identification</a> </p>
 
 </body>
 
