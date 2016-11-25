@@ -16,18 +16,19 @@ $recettes = $bdd->query('SELECT id_recette, nom_recette,
 						FROM Recettes_de_cuisine, Internaute 
 						WHERE Recettes_de_cuisine.id_internaute = Internaute.id_internaute AND
 						id_recette =' . $_GET['id_recette']);
+						
+// On récupère les informations de la recette						
 $rec = $recettes->fetch();
 echo $rec['pseudo'];
-?>
-<!--
-// On récupère les informations de la recette
-$rec = $recettes->fetch();
+
 
 // Affichage de la recette
-echo '<h3>'.$rec['nom_recette'].' (Ajouté le ' . $rec['date_ajout_fr'] . ' par '. $rec['Internaute.pseudo'] . ')</h3><br>';
-echo 'Nombre de personnes : <br>';
+echo '<h3>'. $rec['nom_recette'].' (Ajoutée le ' . $rec['date_ajout_fr'] . ' par '. $rec['pseudo'] . ')</h3><br>';
+echo 'Nombre de personnes : '. $rec['nombre_personnes']. '<br>';
+echo 'Temps de préparation : '. $rec['temps_preparation']. '<br>';
+echo 'Temps de cuisson : '. $rec['temps_cuisson']. '<br>';
 ?>
--->
+
 
 </body>
 </html>
