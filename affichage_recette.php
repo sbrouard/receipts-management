@@ -41,28 +41,38 @@ while($ingr = $ingredients->fetch()){
 	
 	// On récupère les caractéristiques nutritionnelles
 	$caracteristiques = $bdd->query('SELECT * FROM Avoir_Caracteristiques WHERE nom_ingredient ="'. $ingr['nom_ingrédient'] .'"');	
-	echo '<div class="caracteristique" id="'.$ingr['nom_ingrédient'].'_hover">';
+	echo '<span class="caracteristique" id="'.$ingr['nom_ingrédient'].'_hover" style="">';
+	$compteur_caracteristiques = 0;
 	while($carac = $caracteristiques->fetch()){
-		echo $carac['nom_caracteristique'] . ' : ' . $carac['valeur'] . ' ' . $carac['unite']. '<br>';
+		$compteur_caracteristiques +=1; 
+		echo $carac['nom_caracteristique'] . ' : ' . $carac['valeur'] . ' ' . $carac['unite'].'<br>';
 	}
-	echo '</div>';
-?>
-	
-	<!--Gestion du hover pour chaque ingrédient -->
-	<script>
-		var element = document.querySelectorAll('#truc'); //<?php echo $ingr['nom_ingrédient']; ?>
-		alert(element);
-		/*element.addEventListener('mouseover', function(e){
-			e.target.style.top = e.pageX;
-			e.target.style.left = e.pageY;*/
-		//});
-	</script>
-<?php
+	echo '</span>';
 
-	echo '<br>';
+	if($compteur_caracteristiques != 0){
+		echo 
+			'<!--Gestion du hover pour chaque ingrédient -->
+			<script type="text/javascript">
+				var element = document.getElementById(\''.$ingr['nom_ingrédient'].'\'); 
+				element.addEventListener(\'mouseover\', function(e){
+					var el = document.getElementById(\''. $ingr['nom_ingrédient'].'_hover\');
+					el.style.position = \'absolute\';
+					el.style.left = e.clientX + 30 +\'px\';
+					el.style.top = e.clientY + 30 +\'px\';
+					
+				});
+				element.addEventListener(\'mouseout\', function(e){
+					var el = document.getElementById(\''.$ingr['nom_ingrédient'].'_hover\');
+					el.style.position = \'absolute\';
+					el.style.left = \'-100px\';
+					el.style.top = \'-100px\';
+				});
+			</script> ';
+	}
 }
 ?>
 
 
+	
 </body>
 </html>
