@@ -23,7 +23,7 @@ if(!isset($_SESSION['pseudo'])){
 <label for="nom_recette"><b>Titre de la recette: </b></label><input name="nom_recette" id="nom_recette" type="text" maxlength="255" required="required"/> <br />
 
 <label for="categorie"><b>Catégorie de la recette: </b></label>
-<select name="categorie" i="categorie">
+<select name="categorie" id="categorie">
 <?php
 $categories = $bdd->query('SELECT * FROM Categories WHERE nom_categorie != \'Autre\'');
 while ($cat = $categories->fetch()){
@@ -40,12 +40,12 @@ while ($cat = $categories->fetch()){
 <label for="temps_cuisson"><b>Temps de cuisson: </b></label><input name="hcuisson" id="temps_cuisson" type="number" min="0" value="0" style="width:55px;" required="required"/>h
 <input name="mincuisson" type="number" min=0 max="59" value="00" style="width:55px;" required="required"/>min<br />
 
-<label for="description"><b>Description: </b></label><textarea name="description" id="description" required></textarea><br />
+<label for="description"><b>Description: </b></label><textarea name="description" id="description" maxlength="255" required></textarea><br />
 
 <table id="list_ingredients">
-	<tr><td><label for="ingredient"><b>Ingrédients: </b></label></td><td><input name="ingredient1" id="ingredient" type="text" placeholder="nom de l'ingrédient" required />
+	<tr><td><label for="ingredient"><b>Ingrédients: </b></label></td><td><input name="ingredient1" id="ingredient" type="text" maxlength="255" placeholder="nom de l'ingrédient" required />
 																		<input name="quantite1" type="number" min="0" placeholder="quantité" required style="width:80px;"/>
-																		<input name="unite1" type="text" placeholder="unité" style="width:80px;" /></td></tr></table><br>
+																		<input name="unite1" type="text" maxlength="255" placeholder="unité" style="width:80px;" /></td></tr></table><br>
 <input type="hidden" name="nb_ingredients" id="nb_ingredients" required value="1"/>
 <span onclick="nouvel_ingredient();">Ajouter un nouvel ingrédient</span><br />
 
@@ -127,7 +127,7 @@ var nb_ingredients = 1;
 
 function nouvel_ingredient(){
 	nb_ingredients++;
-	document.getElementById('list_ingredients').innerHTML += '<tr><td></td><td><input name="ingredient' + nb_ingredients + '" type="text" placeholder="nom de l\'ingrédient" required/>  <input name="quantite' + nb_ingredients + '" type="number" min="0" placeholder="quantité" required style="width:80px;"/>  <input name="unite' + nb_ingredients + '" type="text" placeholder="unité" style="width:80px;" /></td></tr>';
+	document.getElementById('list_ingredients').innerHTML += '<tr><td></td><td><input name="ingredient' + nb_ingredients + '" type="text" maxlength="255" placeholder="nom de l\'ingrédient" required/>  <input name="quantite' + nb_ingredients + '" type="number" min="0" placeholder="quantité" required style="width:80px;"/>  <input name="unite' + nb_ingredients + '" type="text" maxlength="255" placeholder="unité" style="width:80px;" /></td></tr>';
 	document.getElementById("nb_ingredients").value = nb_ingredients;
 }
 
