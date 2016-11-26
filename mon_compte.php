@@ -23,9 +23,9 @@ if(!isset($_SESSION['pseudo'])){
 <!-- traitement du formulaire d'inscription -->
 <?php 
 if (!isset($_POST['password1']) || empty($_POST['password2'])){
-	echo "Veuillez entrer votre mot de passe actuel ";
+	//echo "Veuillez entrer votre mot de passe actuel ";
 	if (!isset($_POST['password2']) || empty($_POST['password2'])){
-		echo "Veuillez entrer votre nouveau mot de passe";
+		//echo "Veuillez entrer votre nouveau mot de passe";
 	}
 	echo "<br>";
 }
@@ -80,6 +80,18 @@ while ($rec = $menus->fetch()){
 echo '<p> <a href="affichage_menu.php?id_menu='.$rec['id_menu'].'">'. $rec['nom_menu'].'</a> </p>';
 }
 ?>	
+
+
+<form method="post" action="mon_compte.php">
+<input type="submit" value="Déconnexion" />
+</form>
+<!-- traitement du formulaire d'inscription -->
+<?php 
+if ($_SERVER['REQUEST_METHOD'] == 'POST'){
+	session_destroy();
+}
+
+?>
 	
 
 	
