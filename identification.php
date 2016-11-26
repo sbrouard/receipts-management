@@ -15,8 +15,8 @@ include("ouvrir_base.php"); ?>
 
 
 <form method="post" action="identification.php">
-<label for="pseudo">Enter votre pseudo: </label><input type="text" name="pseudo" id="pseudo" placeholder="pseudo" /> <br />
-<label for="password">Entrer votre mot de passe: </label><input type="password" name="password" id="password" placeholder="password" /> <br />
+<label for="pseudo">Enter votre pseudo: </label><input type="text" name="pseudo" id="pseudo" placeholder="pseudo" required="required"/> <br />
+<label for="password">Entrer votre mot de passe: </label><input type="password" name="password" id="password" placeholder="password" required="required"/> <br />
 <input type="submit" value="M'identifier" />
 </form>
 
