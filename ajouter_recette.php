@@ -43,7 +43,9 @@ while ($cat = $categories->fetch()){
 <label for="description"><b>Description: </b></label><textarea name="description" id="description" required></textarea><br />
 
 <table id="list_ingredients">
-	<tr><td><label for="ingredient"><b>Ingrédients: </b></label></td><td><input name="ingredient1" id="ingredient" type="text" required /></td></tr></table><br>
+	<tr><td><label for="ingredient"><b>Ingrédients: </b></label></td><td><input name="ingredient1" id="ingredient" type="text" placeholder="nom de l'ingrédient" required />
+																		<input name="quantite1" type="number" min="0" placeholder="quantité" required style="width:80px;"/>
+																		<input name="unite1" type="text" placeholder="unité" style="width:80px;" /></td></tr></table><br>
 <input type="hidden" name="nb_ingredients" id="nb_ingredients" required value="1"/>
 <span onclick="nouvel_ingredient();">Ajouter un nouvel ingrédient</span><br />
 
@@ -70,12 +72,29 @@ if(isset($_POST['nom_recette']) && isset($_POST['categorie']) && isset($_POST['n
 												CURRENT_DATE, "' . $_POST['nb_personnes'] .'",
 												"' . $temps_preparation .'","' . $temps_cuisson . '",
 												(SELECT id_internaute FROM Internaute WHERE pseudo="' . $_SESSION['pseudo'] .'"))');
-
+	
+	//$recette_id =$bdd->query('SELECT LAST_INSERT_ID()');
+	$recette_id=$bdd->lastInsertId();
 // inserer dans Descriptions
 
+	$bdd->exec('INSERT INTO Descriptions(date_debut,date_fin,texte,id_recette) VALUES(CURRENT_DATE, "0000-00-00","' . $_POST['description'] . '", 
+	' . $recette_id . ')');
+
+// inserer dans ingredients si abstent
 
 // inserer dans Contenir Ingredients
 
+	for($i = 1; $i < $_POST['nb_ingredients']+1;$i++){
+		
+		if(isset($_POST['ingredient' . $i])){
+			$test_exists = $bdd->query('SELECT EXISTS (SELECT * FROM Ingredients WHERE nom_ingredient = "' . $_POST['ingredient' . $i] . '") AS ingredient_exists');
+			$exists = $test_exists->fetch();
+			if(!$exists['ingredient_exists']){ // Si l'ingredient n'est pas deja dans la base, on le rajoute
+				$bdd->exec('INSERT INTO Ingredients(nom_ingredient) Values("' . $_POST['ingredient' . $i] .'")');
+			}
+			$bdd->exec('INSERT INTO Contenir_ingredients(unite,valeur,id_recette,nom_ingrédient) VALUES("' . $_POST['unite' . $i] . '","' . $_POST['quantite' . $i] . '","' . $recette_id .'", "' . $_POST['ingredient' . $i] .'")'); 
+		}
+	}
 		echo "Recette ajoutée !<br>";
 	}
 	else{
@@ -108,7 +127,7 @@ var nb_ingredients = 1;
 
 function nouvel_ingredient(){
 	nb_ingredients++;
-	document.getElementById('list_ingredients').innerHTML += '<tr><td></td><td><input name="ingredient' + nb_ingredients + '" id="ingredient" type="text" required/></td></tr>';
+	document.getElementById('list_ingredients').innerHTML += '<tr><td></td><td><input name="ingredient' + nb_ingredients + '" type="text" placeholder="nom de l\'ingrédient" required/>  <input name="quantite' + nb_ingredients + '" type="number" min="0" placeholder="quantité" required style="width:80px;"/>  <input name="unite' + nb_ingredients + '" type="text" placeholder="unité" style="width:80px;" /></td></tr>';
 	document.getElementById("nb_ingredients").value = nb_ingredients;
 }
 
