@@ -33,11 +33,11 @@ echo '<h3 id="truc">'. $rec['nom_recette'].' (Ajoutée le ' . $rec['date_ajout_f
 echo 'Nombre de personnes : '. $rec['nombre_personnes']. '<br>';
 echo 'Temps de préparation : '. $rec['temps_prepa']. '<br>';
 echo 'Temps de cuisson : '. $rec['temps_cuiss']. '<br>';
-echo 'Ingrédients nécessaires : ';
+echo 'Ingrédients nécessaires <i>(survoler pour avoir les caracteristiques)</i>: ';
 while($ingr = $ingredients->fetch()){
 	
 	// On affiche l'ingrédient
-	echo '<span id="'. $ingr['nom_ingrédient']. '">' .$ingr['valeur'].' '.$ingr['unite']. ' de ' .$ingr['nom_ingrédient'] . ',</span> ';
+	echo '<u class="nom_ingredient" id="'. $ingr['nom_ingrédient']. '">' .$ingr['valeur'].' '.$ingr['unite']. ' de ' .$ingr['nom_ingrédient'] . ',</u> ';
 	
 	// On récupère les caractéristiques nutritionnelles
 	$caracteristiques = $bdd->query('SELECT * FROM Avoir_Caracteristiques WHERE nom_ingredient ="'. $ingr['nom_ingrédient'] .'"');	
@@ -70,6 +70,51 @@ while($ingr = $ingredients->fetch()){
 			</script> ';
 	}
 }
+
+
+
+
+
+
+
+// Affichage des menus dont la recette fait partie
+echo '<br>Menus dont cette recette fait partie: ';
+$menus = $bdd->query('SELECT * 
+					FROM (Menu INNER JOIN Contenir_recette 
+					ON Menu.id_menu = Contenir_recette.id_menu) 
+					WHERE id_recette =' . $_GET['id_recette']);
+while($menu=$menus->fetch()){
+	echo '<a href="affichage_menu.php?id_menu='. $menu['id_menu']. '">' . $menu['nom_menu']. '</a>, ';
+}
+echo '<br>';
+
+
+
+
+
+
+// Affichage des commentaires
+echo '<br><br><br>Commentaires: <br><br>';
+$commentaires = $bdd->query('SELECT DATE_FORMAT(date, \'%d/%m%Y à %hh%imin%ss\') AS date_fr,
+							texte, pseudo, id_recette
+							FROM Commenter INNER JOIN Internaute
+							ON Commenter.id_internaute = Internaute.id_internaute
+							where id_recette='.$_GET['id_recette']);
+while($com = $commentaires->fetch()){
+	echo 'Le '. $com['date_fr'] . ' par ' . $com['pseudo']. ':<br>';
+	echo $com['texte'].'<br><br>';
+}
+
+
+
+
+// Commenter
+echo '<form method="post action="affichage_recette.php">
+		<label for="com">Rajouter un commentaire: <br></label>
+		<textarea name="com" id="com" rows="5" cols="49" maxlength="255"></textarea></textarea>
+		<input type="submit" value="Envoyer mon commentaire">
+	</form>';
+
 ?>
 
 
