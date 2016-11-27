@@ -1,5 +1,5 @@
 <?php include("ouvrir_base.php"); 
-if(!isset($_SESSION['pseudo'])){
+if(empty($_SESSION['pseudo'])){
 	header('Location: index.php');	
 	exit();
 }
@@ -85,11 +85,14 @@ echo '<p> <a href="affichage_menu.php?id_menu='.$rec['id_menu'].'">'. $rec['nom_
 <form method="post" action="mon_compte.php">
 <input type="submit" value="Déconnexion" />
 </form>
-<!-- traitement du formulaire d'inscription -->
+<!-- traitement du formulaire de déconnection -->
 <?php 
 if ($_SERVER['REQUEST_METHOD'] == 'POST'){
 	session_destroy();
+	header('Location: index.php');	
 }
+
+
 
 ?>
 	
