@@ -23,18 +23,17 @@ if(!isset($_SESSION['pseudo'])){
 $categories = $bdd->query('SELECT nom_categorie FROM Categories');
 //On affiche les lignes une à une:
 echo '<p>  <label for="recettes">Quelle recette souhaitez-vous ajouter ?</label><br />' ;
-echo ' <select name="recettes" id="recettes">' ;
+echo ' <select name="recettes" id="recettes" onchange="ajouter_recette();"> <option disabled selected>Ajouter une recette</option>' ;
 
 while ($rec = $categories->fetch()){
 	
 	echo '<optgroup label="' . $rec['nom_categorie'] . '">';
 	
 	// On récupère les recettes appartenant à chaque catégorie 
-	$recettes = $bdd->query('SELECT nom_recette FROM Recettes_de_cuisine, Appartenir_catégorie WHERE Recettes_de_cuisine.id_recette = Appartenir_catégorie.id_recette AND Appartenir_catégorie.nom_catégorie = \''. $rec['nom_categorie'] .'\'' );
+	$recettes = $bdd->query('SELECT Recettes_de_cuisine.id_recette AS id_recette,nom_recette FROM Recettes_de_cuisine, Appartenir_catégorie WHERE Recettes_de_cuisine.id_recette = Appartenir_catégorie.id_recette AND Appartenir_catégorie.nom_catégorie = \''. $rec['nom_categorie'] .'\'' );
 	//On affiche les lignes une à une:
 	while ($rec = $recettes->fetch()){
-			echo '<option value="recette">' . $rec['nom_recette'] . '</option>';
-			
+			echo '<option value="' . $rec['id_recette'] .'">' . $rec['nom_recette'];
 	};   
 		
 	echo '</optgroup> ';   
@@ -49,6 +48,25 @@ while ($rec = $categories->fetch()){
 </form>
 <input type="submit" value="Ajouter la recette" >
 	
+
+<p id="recettes_menu">
+
+</p>
+	
+
+
+<script>
+
+function ajouter_recette(){
+	document.getElementById('recettes_menu').innerHTML += document.getElementById('recettes').value + '<br>';
+	}
+
+
+</script>
+
+
+
+
 </body>
 
 </html>

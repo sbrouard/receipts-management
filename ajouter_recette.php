@@ -95,6 +95,13 @@ if(isset($_POST['nom_recette']) && isset($_POST['categorie']) && isset($_POST['n
 			$bdd->exec('INSERT INTO Contenir_ingredients(unite,valeur,id_recette,nom_ingrédient) VALUES("' . $_POST['unite' . $i] . '","' . $_POST['quantite' . $i] . '","' . $recette_id .'", "' . $_POST['ingredient' . $i] .'")'); 
 		}
 	}
+	
+	
+	// Insérer dans appartenir_categorie
+	
+	$bdd->exec('INSERT INTO Appartenir_catégorie(nom_catégorie,id_recette) VALUES("' . $_POST['categorie'] .'","' . $recette_id .'")');
+	
+	
 		echo "Recette ajoutée !<br>";
 	}
 	else{
@@ -104,13 +111,7 @@ if(isset($_POST['nom_recette']) && isset($_POST['categorie']) && isset($_POST['n
 	
 
 
-// inserer dans Recettes de cuisine
-
-
-// inserer dans Descriptions
-
-
-// inserer dans Contenir Ingredients
+	
 	
 	
 ?>
