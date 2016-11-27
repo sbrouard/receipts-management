@@ -95,25 +95,45 @@ echo '<br>';
 
 // Affichage des commentaires
 echo '<br><br><br>Commentaires: <br><br>';
-$commentaires = $bdd->query('SELECT DATE_FORMAT(date, \'%d/%m%Y à %hh%imin%ss\') AS date_fr,
-							texte, pseudo, id_recette
+$commentaires = $bdd->query('SELECT date, DATE_FORMAT(date, \'%d/%m/%Y à %hh%imin%ss\') AS date_fr,
+							texte, pseudo, id_recette, Internaute.id_internaute
 							FROM Commenter INNER JOIN Internaute
 							ON Commenter.id_internaute = Internaute.id_internaute
-							where id_recette='.$_GET['id_recette']);
+							where id_recette='.$_GET['id_recette'].
+							' ORDER BY date DESC');
+$already_comment = 0;
 while($com = $commentaires->fetch()){
 	echo 'Le '. $com['date_fr'] . ' par ' . $com['pseudo']. ':<br>';
 	echo $com['texte'].'<br><br>';
+	
+	if(isset($_SESSION) && !empty($_SESSION)){
+		if($com['pseudo']==$_SESSION['pseudo']){
+			$already_comment += 1;
+		}
+	}
 }
 
 
 
 
-// Commenter
-echo '<form method="post action="affichage_recette.php">
-		<label for="com">Rajouter un commentaire: <br></label>
-		<textarea name="com" id="com" rows="5" cols="49" maxlength="255"></textarea></textarea>
-		<input type="submit" value="Envoyer mon commentaire">
-	</form>';
+// Commenter 
+if(!$already_comment && isset($_SESSION) && !empty($_SESSION)){
+	$internaut_connected = $bdd->query('SELECT id_internaute FROM Internaute WHERE pseudo="'.$_SESSION['pseudo'].'"');
+	$internaute = $internaut_connected->fetch();	
+	
+	if(isset($_POST['com'])){
+		$bdd->exec('INSERT INTO Commenter(date,texte,id_internaute,id_recette)
+					VALUES(NOW(),"'.$_POST['com'].'",'.$internaute['id_internaute'].','.$_GET['id_recette'].')');
+		header('Location: affichage_recette.php?id_recette='.$_GET['id_recette']);
+	}
+	if(!isset($_POST['com'])){
+		echo '<form method="post" action="affichage_recette.php?id_recette='.$_GET['id_recette'].'">
+				<label for="com">Rajouter un commentaire: <br></label>
+				<textarea name="com" id="com" rows="5" cols="49" maxlength="255"></textarea></textarea>
+				<input type="submit" value="Envoyer mon commentaire">
+			</form>';
+	}
+}
 
 ?>
 
