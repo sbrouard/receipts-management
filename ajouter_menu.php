@@ -104,7 +104,7 @@ function ajouter_recette(){
 	nb_recettes++;
 	var value = document.getElementById('recettes').value.split(',');
 	document.getElementById('recettes_menu').innerHTML += value[1] +  '<br>';
-	document.getElementById('form').innerHTML += "<input type='hidden' name='recette"+nb_recettes+"' value='" + value[1] + "' /> <br>";
+	document.getElementById('form').innerHTML += "<input type='hidden' name='recette"+nb_recettes+"' value='" + value[0] + "' /> <br>";
 	document.getElementById('nb_recettes').value = nb_recettes;
 	}
 
