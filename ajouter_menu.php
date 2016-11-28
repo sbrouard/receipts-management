@@ -15,7 +15,9 @@ if(!isset($_SESSION['pseudo'])){
 <body>
 	
 <br>
-<label for="nom_menu"><b>Titre du menu: </b></label><input name="nom_menu" id="nom_menu" type="text" maxlength="255" required="required"/> <br />
+
+
+<label for="nom_menu1"><b>Titre du menu: </b></label><input name="nom_menu1" id="nom_menu" type="text" maxlength="255" required="required" value=""/> <br />
 
 
 <?php 
@@ -54,10 +56,10 @@ while ($rec = $categories->fetch()){
 </p>
 	
 <form method="post" action="#" id="form" >
+	<input type="hidden" name="nom_menu" id="nom_menu_form" value="" required="required" />
 	<input type="hidden" name="nb_recettes" id="nb_recettes" value="0" />
-	<input type="submit" value="Créer le menu" />
 </form>
-
+<button onclick="creer_menu()">Créer le menu</button>
 
 <?php
 
@@ -66,9 +68,15 @@ if(isset($_POST['nb_recettes'])){
 		echo "Veuillez entrer au moins une recette<br>";
 	}
 	else{
-		for($i = 0; $i < $_POST['nb_recettes'];$i++){
+		$result_id = $bdd->query('SELECT id_internaute FROM Internaute WHERE pseudo = "' . $_SESSION['pseudo'] .'"');
+		$id_internaute = $result_id->fetch();
+		$id_internaute = $id_internaute['id_internaute'];
+		$bdd->exec('INSERT INTO Menu(nom_menu,id_internaute) VALUES("' . $_POST['nom_menu'] .'","'. $id_internaute .'")');
+		$menu_id=$bdd->lastInsertId();
+		for($i = 1; $i < $_POST['nb_recettes']+1;$i++){
 			if(isset($_POST['recette' . $i])){
-				//$bdd->exec('INSERT INTO Menu(nom_menu,id_internaute)
+				$bdd->exec('INSERT INTO Contenir_recette(id_recette,id_menu) VALUES("' . $_POST['recette' . $i] .'","' . $menu_id .'")'); 
+				
 			}
 		}
 		echo "Le menu a bien été créé<br>";
@@ -86,6 +94,12 @@ if(isset($_POST['nb_recettes'])){
 
 <script>
 var nb_recettes = 0;
+
+function creer_menu(){
+	document.getElementById("nom_menu_form").value = document.getElementById("nom_menu").value;
+	document.getElementById('form').submit();
+}
+
 function ajouter_recette(){
 	nb_recettes++;
 	var value = document.getElementById('recettes').value.split(',');
