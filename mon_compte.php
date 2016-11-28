@@ -3,6 +3,11 @@ if(empty($_SESSION['pseudo'])){
 	header('Location: index.php');	
 	exit();
 }
+if ($_SERVER['REQUEST_METHOD'] == 'POST'){
+	session_destroy();
+	header('Location: index.php');	
+	exit();
+}
 ?>
 
 <!DOCTYPE html>
@@ -86,12 +91,13 @@ echo '<p> <a href="affichage_menu.php?id_menu='.$rec['id_menu'].'">'. $rec['nom_
 <input type="submit" value="Déconnexion" />
 </form>
 <!-- traitement du formulaire de déconnection -->
-<?php 
+<?php /*
 if ($_SERVER['REQUEST_METHOD'] == 'POST'){
 	session_destroy();
 	header('Location: index.php');	
+	exit();
 }
-
+*/
 
 
 ?>
