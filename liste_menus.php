@@ -8,14 +8,46 @@
 
 <body>
 
-<h2>Liste des recettes</h2>
+<h2>Liste des menus</h2>
+
+
+<form method="post" action="#">
+<label for="date">Sélectionner uniquement les menus ne comportant que des recettes ajoutées après le: </label><input type="date" name="date" id="date" placeholder="jj/ll/aaaa" maxlength="10" style="width:80;"/>
+<input type="submit" value="sélectionner" />
+</form>
+
 
 <?php 
-// On récupère le contenu de la table Recettes_de cuisine
-$menus = $bdd->query('SELECT id_menu,nom_menu FROM Menu');
-while ($men = $menus->fetch()){
 
-echo '<p> <a href="affichage_menu.php?id_recette='.$men['id_menu'].'">'. $men['nom_menu'].'</a> </p>';
+
+
+if(isset($_POST['date']) && !empty($_POST['date'])){
+	if(!preg_match("#^[0-3]?[0-9]/(0|1)?[0-9]/[0-2][0-9][0-9][0-9]$#",$_POST['date'])){
+		echo "La date doit être au format \"jj/mm/aaa\"<br>";
+	}
+	else{
+		$date_sql = explode('/',$_POST['date']);
+		if(!checkdate($date_sql[1],$date_sql[0],$date_sql[2])){
+			echo "Cette date n'existe pas";
+		}
+		else{
+			echo 'SELECT id_menu,nom_menu FROM Menu WHERE id_menu NOT IN (SELECT M.id_menu FROM Menu M,Contenir_recette C, Recettes_de_cuisine R WHERE R.date_ajout < "' . $date_sql[2] .'-'. $date_sql[1] .'-'. $date_sql['0'] .'" AND R.id_recette = C.id_recette AND C.id_menu= M.id_menu)';
+			$menus = $bdd->query('SELECT id_menu,nom_menu FROM Menu WHERE id_menu NOT IN (SELECT M.id_menu FROM Menu M,Contenir_recette C, Recettes_de_cuisine R WHERE R.date_ajout < "' . $date_sql[2] .'-'. $date_sql[1] .'-'. $date_sql['0'] .'" AND R.id_recette = C.id_recette AND C.id_menu= M.id_menu)');
+			$test = $bdd->query('SELECT M.id_menu FROM Menu M,Contenir_recette C, Recettes_de_cuisine R WHERE R.date_ajout < "' . $date_sql[2] .'-'. $date_sql[1] .'-'. $date_sql['0'] .'" AND R.id_recette = C.id_recette AND C.id_menu= M.id_menu');
+			while($t = $test->fetch()){
+				echo $t['id_menu'].'<br>';
+			}
+			while ($men = $menus->fetch()){
+				echo '<p> <a href="affichage_menu.php?id_recette='.$men['id_menu'].'">'. $men['nom_menu'].'</a> </p>';
+			}
+		}
+	}
+}
+else{
+	$menus = $bdd->query('SELECT id_menu,nom_menu FROM Menu');
+	while ($men = $menus->fetch()){
+		echo '<p> <a href="affichage_menu.php?id_recette='.$men['id_menu'].'">'. $men['nom_menu'].'</a> </p>';
+	}
 }
 
 ?>
