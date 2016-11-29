@@ -72,8 +72,14 @@ while($ingr = $ingredients->fetch()){
 }
 
 
+// Note moyenne et nombre de votes
+$notation = $bdd->query('SELECT avg(valeur) AS note, count(id_internaute) AS nb_votes
+					FROM Noter
+					WHERE id_recette='. $_GET['id_recette'].
+					' GROUP BY id_recette');
 
-
+$note= $notation->fetch();
+echo '<br>Note moyenne: '.$note['note'].'/3 ('.$note['nb_votes'].' votes)<br>';
 
 
 
@@ -89,7 +95,34 @@ while($menu=$menus->fetch()){
 echo '<br>';
 
 
+// Description actuelle
+$descriptions = $bdd->query('SELECT id_description, texte,
+							DATE_FORMAT(date_debut, \'%d/%m/%Y\') AS debut_description,
+							DATE_FORMAT(date_fin, \'%d/%m/%Y\') AS fin_description
+							FROM Descriptions WHERE	id_recette='.$_GET['id_recette'].
+							' ORDER BY date_debut DESC');
+if($description_actuelle = $descriptions->fetch()){
+	echo '<br>Consignes actuelles de préparation de la recette (écrit le '.$description_actuelle['debut_description']. ') : <br>' .$description_actuelle['texte'].'<br>';
+}
+else{
+	echo '<br>Consignes actuelles de préparation de la recette: Aucune description n\'est fournie pour cette recette<br>';
+}
 
+
+// Afficher descriptions précédentes
+if(isset($_GET['anciennes_descriptions']) && !empty($_GET['anciennes_descriptions'])){
+	$compteur_fetch = 0;
+	while($description = $descriptions->fetch()){
+		$compteur_fetch += 1;
+		echo '<br>Description du '.$description['debut_description']. ' au '.$description['fin_description'].' : <br>' .$description['texte'].'<br>';
+	}
+	if($compteur_fetch == 0){
+		echo '<br> Aucune autre description <br>';
+	}
+}
+else{
+	echo '<a href="affichage_recette.php?id_recette='.$_GET['id_recette'].'&anciennes_descriptions=1">Voir les anciennes descriptions de la recette</a>';
+}
 
 
 
@@ -102,7 +135,9 @@ $commentaires = $bdd->query('SELECT date, DATE_FORMAT(date, \'%d/%m/%Y à %hh%im
 							where id_recette='.$_GET['id_recette'].
 							' ORDER BY date DESC');
 $already_comment = 0;
+$compteur_fetch = 0;
 while($com = $commentaires->fetch()){
+	$compteur_fetch += 1;
 	echo 'Le '. $com['date_fr'] . ' par ' . $com['pseudo']. ':<br>';
 	echo $com['texte'].'<br><br>';
 	
@@ -111,6 +146,9 @@ while($com = $commentaires->fetch()){
 			$already_comment += 1;
 		}
 	}
+}
+if($compteur_fetch ==0){
+	echo 'Cette recette n\'a pas encore été commentée <br><br>';
 }
 
 
