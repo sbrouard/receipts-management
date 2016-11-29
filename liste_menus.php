@@ -38,7 +38,7 @@ if(isset($_POST['date']) && !empty($_POST['date'])){
 				echo $t['id_menu'].'<br>';
 			}
 			while ($men = $menus->fetch()){
-				echo '<p> <a href="affichage_menu.php?id_recette='.$men['id_menu'].'">'. $men['nom_menu'].'</a> </p>';
+				echo '<p> <a href="affichage_menu.php?id_menu='.$men['id_menu'].'">'. $men['nom_menu'].'</a> </p>';
 			}
 		}
 	}
@@ -46,7 +46,7 @@ if(isset($_POST['date']) && !empty($_POST['date'])){
 else{
 	$menus = $bdd->query('SELECT id_menu,nom_menu FROM Menu');
 	while ($men = $menus->fetch()){
-		echo '<p> <a href="affichage_menu.php?id_recette='.$men['id_menu'].'">'. $men['nom_menu'].'</a> </p>';
+		echo '<p> <a href="affichage_menu.php?id_menu='.$men['id_menu'].'">'. $men['nom_menu'].'</a> </p>';
 	}
 }
 
