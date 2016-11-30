@@ -8,6 +8,13 @@
 
 <body>
 	
+<br>
+<!-- Revenir à la liste des recettes -->
+<a href="liste_recettes.php">Revenir à la liste des recettes</a><br>
+	
+<!-- Revenir à la recette initiale -->
+<a href="affichage_recette.php?id_recette=<?php echo $_GET['id_recette'] ?>">Revenir à l'affichage de départ de la recette</a><br>
+	
 <?php	
 // On récupère le contenu de la recette dans la table Recettes_de cuisine
 $recettes = $bdd->query('SELECT R.id_recette, nom_recette, 
@@ -85,24 +92,51 @@ echo '<br>Note moyenne: '.$note['note'].'/3 ('.$note['nb_votes'].' votes)<br>';
 
 
 
-// Ma note (A TESTER)
+// Ma note
+
+//Récup id internaute
+$id_internaute = 0;
+if(isset($_SESSION['pseudo']) && !empty($_SESSION['pseudo'])){
+	$intern = $bdd->query('SELECT id_internaute FROM Internaute WHERE pseudo="'.$_SESSION['pseudo'].'"');
+	$i = $intern->fetch();
+	$id_internaute = $i['id_internaute'];
+}
+
 // Traitement de la note modifiée
-if(isset($_SESSION['pseudo']) && !empty($_SESSION['pseudo']) && isset($_POST['value']) && !empty($_POST['value'])){
-	$bdd->exec('UPDATE Noter SET valeur='.$_POST['value'].'WHERE id_internaute='.$_SESSION['pseudo']);
+if(isset($_SESSION['pseudo']) && !empty($_SESSION['pseudo']) && isset($_POST['note']) && !empty($_POST['note'])){
+	if($_GET['deja_note'] == 1){
+	 $bdd->exec('UPDATE Noter SET valeur='.$_POST['note'].' WHERE id_internaute="'.$id_internaute.'"');
+	}
+	else if($_GET['deja_note'] == 0){
+		$bdd->exec('INSERT INTO Noter(valeur, id_internaute, id_recette) VALUES('.$_POST['note'].','.$id_internaute.','.$_GET['id_recette'].')');
+	}	
 	header('Location: affichage_recette.php?id_recette='.$_GET['id_recette']);
 }
 
 // Page pour modifier la note
 if(isset($_GET['modifier_note']) && !empty($_GET['modifier_note']) && isset($_SESSION['pseudo']) && !empty($_SESSION['pseudo'])){
-	$ma_note = $bdd->query('SELECT valeur FROM Noter WHERE id_internaute ='.$_SESSION['pseudo']);
-	if($note = $ma_mote->fetch()){
+	$ma_note = $bdd->query('SELECT valeur FROM Noter WHERE id_internaute ='.$id_internaute.' AND id_recette='. $_GET['id_recette']);
+	if($note = $ma_note->fetch()){
 		echo '<br>Ma note: '.$note['valeur'].'<br>';
-		echo  '<form method="post" action="affichage_recette.php?id_recette='.$_GET['id_recette'].'">
+		echo  '<form method="post" action="affichage_recette.php?id_recette='.$_GET['id_recette'].'&deja_note='.$_GET['deja_note'].'">
 				<p>
 				Veuillez indiquer votre nouvelle note: <br>
 				<input type="radio" name="note" value="1" id="note1"> <label for="note1">1</label><br>
 				<input type="radio" name="note" value="2" id="note2"> <label for="note2">2</label><br>
-				<input type="radio" name="note" value="3" id="note3"> <label for="note3" checked>3</label><br>
+				<input type="radio" name="note" value="3" id="note3" checked> <label for="note3">3</label><br>
+				<input type="submit" value="Envoyer">
+				</p>
+				</form>';
+	}
+	else{
+		echo '<br>Ma note: Vous n\'avez pas encore noté cette recette.<br>';
+		echo  '<form method="post" action="affichage_recette.php?id_recette='.$_GET['id_recette'].'&deja_note='.$_GET['deja_note'].'">
+				<p>
+				Veuillez indiquer votre nouvelle note: <br>
+				<input type="radio" name="note" value="1" id="note1"> <label for="note1">1</label><br>
+				<input type="radio" name="note" value="2" id="note2"> <label for="note2">2</label><br>
+				<input type="radio" name="note" value="3" id="note3" checked> <label for="note3">3</label><br>
+				<input type="submit" value="Envoyer">
 				</p>
 				</form>';
 	}
@@ -110,13 +144,14 @@ if(isset($_GET['modifier_note']) && !empty($_GET['modifier_note']) && isset($_SE
 
 // Affichage de base de la note
 if((!isset($_GET['modifier_note']) || empty($_GET['modifier_note'])) && (isset($_SESSION['pseudo']) && !empty($_SESSION['pseudo']))){
-	$ma_note = $bdd->query('SELECT valeur FROM Noter WHERE id_internaute ='.$_SESSION['pseudo']);
-	if($note = $ma_mote->fetch()){
+	$ma_note = $bdd->query('SELECT valeur FROM Noter WHERE id_internaute ='.$id_internaute.' AND id_recette='.$_GET['id_recette']);
+	if($note = $ma_note->fetch()){
 		echo '<br>Ma note: '.$note['valeur'].'<br>';
-		echo '<a href="affichage_recette.php?id_recette='. $_GET['id_recette'].'&modifier_note=1">Modifier ma note</a><br>';
+		echo '<a href="affichage_recette.php?id_recette='. $_GET['id_recette'].'&modifier_note=1&deja_note=1">Modifier ma note</a><br>';
 	}
 	else{
 		echo '<br>Ma note: Vous n\'avez pas encore noté cette recette.<br>';
+		echo '<a href="affichage_recette.php?id_recette='. $_GET['id_recette'].'&modifier_note=1&deja_note=0">Modifier ma note</a><br>';
 	}
 }
 
@@ -187,13 +222,31 @@ $compteur_fetch = 0;
 while($com = $commentaires->fetch()){
 	$compteur_fetch += 1;
 	echo 'Le '. $com['date_fr'] . ' par ' . $com['pseudo']. ':<br>';
-	echo $com['texte'].'<br><br>';
+	echo $com['texte'];
 	
 	if(isset($_SESSION) && !empty($_SESSION)){
 		if($com['pseudo']==$_SESSION['pseudo']){
 			$already_comment += 1;
+			if(!isset($_GET['modif_com'])){
+				echo '<br><a href="affichage_recette.php?id_recette='.$_GET['id_recette'].'&modif_com=1">Modifier mon commentaire</a>';
+			}
 		}
 	}
+	// Traitement du commentaire changé
+	if(isset($_POST['com']) && !empty($_POST['com'])){
+		$bdd->exec('UPDATE Commenter SET texte="'.$_POST['com'].'", date=NOW() WHERE id_recette='.$_GET['id_recette'].' AND id_internaute='.$id_internaute);
+		header('Location: affichage_recette.php?id_recette='.$_GET['id_recette']);
+	}
+	// Proposition de commentaire changé
+	if(isset($_GET['modif_com']) && !empty($_GET['modif_com']) && (!isset($_POST['com']) || empty($_POST['com']))){
+		echo '<form method="post" action="affichage_recette.php?id_recette='.$_GET['id_recette'].'">
+				<label for="com">Modifier mon commentaire: <br></label>
+				<textarea name="com" id="com" rows="5" cols="49" maxlength="255" required></textarea></textarea>
+				<input type="submit" value="Envoyer mon commentaire">
+			</form>';
+	}
+	
+	echo '<br><br>';
 }
 if($compteur_fetch ==0){
 	echo 'Cette recette n\'a pas encore été commentée <br><br>';
@@ -204,20 +257,17 @@ if($compteur_fetch ==0){
 
 // Commenter 
 if(!$already_comment && isset($_SESSION) && !empty($_SESSION)){
-	$internaut_connected = $bdd->query('SELECT id_internaute FROM Internaute WHERE pseudo="'.$_SESSION['pseudo'].'"');
-	$internaute = $internaut_connected->fetch();	
-	
 	// Traitement du commentaire
 	if(isset($_POST['com'])){
 		$bdd->exec('INSERT INTO Commenter(date,texte,id_internaute,id_recette)
-					VALUES(NOW(),"'.$_POST['com'].'",'.$internaute['id_internaute'].','.$_GET['id_recette'].')');
+					VALUES(NOW(),"'.$_POST['com'].'",'.$id_internaute.','.$_GET['id_recette'].')');
 		header('Location: affichage_recette.php?id_recette='.$_GET['id_recette']);
 	}
 	// Proposition de commentaire
 	if(!isset($_POST['com'])){
 		echo '<form method="post" action="affichage_recette.php?id_recette='.$_GET['id_recette'].'">
 				<label for="com">Rajouter un commentaire: <br></label>
-				<textarea name="com" id="com" rows="5" cols="49" maxlength="255"></textarea></textarea>
+				<textarea name="com" id="com" rows="5" cols="49" maxlength="255" required></textarea></textarea>
 				<input type="submit" value="Envoyer mon commentaire">
 			</form>';
 	}
