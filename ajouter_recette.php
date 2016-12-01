@@ -90,9 +90,9 @@ if(isset($_POST['nom_recette']) && isset($_POST['categorie']) && isset($_POST['n
 			$test_exists = $bdd->query('SELECT EXISTS (SELECT * FROM Ingredients WHERE nom_ingredient = "' . $_POST['ingredient' . $i] . '") AS ingredient_exists');
 			$exists = $test_exists->fetch();
 			if(!$exists['ingredient_exists']){ // Si l'ingredient n'est pas deja dans la base, on le rajoute
-				$bdd->exec('INSERT INTO Ingredients(nom_ingredient) Values("' . $_POST['ingredient' . $i] .'")');
+				$bdd->exec('INSERT INTO Ingredients(nom_ingredient) Values(LOWER("' . $_POST['ingredient' . $i] .'"))');
 			}
-			$bdd->exec('INSERT INTO Contenir_ingredients(unite,valeur,id_recette,nom_ingrédient) VALUES("' . $_POST['unite' . $i] . '","' . $_POST['quantite' . $i] . '","' . $recette_id .'", "' . $_POST['ingredient' . $i] .'")'); 
+			$bdd->exec('INSERT INTO Contenir_ingredients(unite,valeur,id_recette,nom_ingrédient) VALUES("' . $_POST['unite' . $i] . '","' . $_POST['quantite' . $i] . '","' . $recette_id .'", LOWER("' . $_POST['ingredient' . $i] .'"))'); 
 		}
 	}
 	
