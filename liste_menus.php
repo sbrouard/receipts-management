@@ -19,7 +19,7 @@
 
 <form method="post" action="#">
 Sélectionner uniquement les menus ne comportant que des recettes avec des ingrédients peu caloriques: kcal&lt;
-<input type="number" id="kcal_max" min="0" required style="width:70px;">kcal
+<input type="number" name ="kcal_max" id="kcal_max" min="0" required style="width:70px;">kcal
 <input type="submit" value="sélectionner" />
 </form>
 
@@ -49,12 +49,20 @@ if(isset($_POST['date']) && !empty($_POST['date'])){
 	}
 }
 
-else if(isset($_POST['kcal_max']) && !empty($_POST['kcal_max'])){
-	$ingredients_peu_cal = $bdd->query('SELECT nom_menu FROM Menu 
-										WHERE id_menu NOT IN 
-										(SELECT Menu.nom_menu FROM Menu, Contenir_recette, Contenir_ingredients, Avoir_Caracteristiques A
-										WHERE (A.nom_caracteristique="Calories" AND valeur<'.$_POST['kcal_max'].') 
-										OR (A.nom_ingredient NOT IN (SELECT nom_ingredient FROM Avoir_Caracteristiques WHERE nom_caracteristique="Calories")))');
+if(isset($_POST['kcal_max']) && !empty($_POST['kcal_max'])){
+	$menus_peu_cal = $bdd->query('SELECT nom_menu, id_menu FROM Menu 
+										WHERE nom_menu NOT IN 
+										(SELECT Menu.nom_menu FROM Menu, Contenir_recette, Contenir_ingredients, Avoir_Caracteristiques A, Ingredients I
+										WHERE Menu.id_menu = Contenir_recette.id_menu 
+										AND Contenir_recette.id_recette = Contenir_ingredients.id_recette 
+										AND Contenir_ingredients.nom_ingrédient = A.nom_ingredient 
+										AND I.nom_ingredient = A.nom_ingredient
+										AND ((A.nom_caracteristique="Calories" AND A.valeur>='.$_POST['kcal_max'].') 
+										OR (I.nom_ingredient NOT IN (SELECT nom_ingredient FROM Avoir_Caracteristiques WHERE nom_caracteristique="Calories"))))');
+	 
+	while ($menu = $menus_peu_cal->fetch()){
+		echo '<p> <a href="affichage_menu.php?id_menu='.$menu['id_menu'].'">'. $menu['nom_menu'].'</a> </p>';
+	}
 }
 
 else{
