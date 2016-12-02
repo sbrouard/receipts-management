@@ -36,12 +36,12 @@ if(isset($_POST['date']) && !empty($_POST['date'])){
 			echo "Cette date n'existe pas";
 		}
 		else{
-			echo 'SELECT id_menu,nom_menu FROM Menu WHERE id_menu NOT IN (SELECT M.id_menu FROM Menu M,Contenir_recette C, Recettes_de_cuisine R WHERE R.date_ajout < "' . $date_sql[2] .'-'. $date_sql[1] .'-'. $date_sql['0'] .'" AND R.id_recette = C.id_recette AND C.id_menu= M.id_menu)';
+			//echo 'SELECT id_menu,nom_menu FROM Menu WHERE id_menu NOT IN (SELECT M.id_menu FROM Menu M,Contenir_recette C, Recettes_de_cuisine R WHERE R.date_ajout < "' . $date_sql[2] .'-'. $date_sql[1] .'-'. $date_sql['0'] .'" AND R.id_recette = C.id_recette AND C.id_menu= M.id_menu)';
 			$menus = $bdd->query('SELECT id_menu,nom_menu FROM Menu WHERE id_menu NOT IN (SELECT M.id_menu FROM Menu M,Contenir_recette C, Recettes_de_cuisine R WHERE R.date_ajout < "' . $date_sql[2] .'-'. $date_sql[1] .'-'. $date_sql['0'] .'" AND R.id_recette = C.id_recette AND C.id_menu= M.id_menu)');
-			$test = $bdd->query('SELECT M.id_menu FROM Menu M,Contenir_recette C, Recettes_de_cuisine R WHERE R.date_ajout < "' . $date_sql[2] .'-'. $date_sql[1] .'-'. $date_sql['0'] .'" AND R.id_recette = C.id_recette AND C.id_menu= M.id_menu');
+			/*$test = $bdd->query('SELECT M.id_menu FROM Menu M,Contenir_recette C, Recettes_de_cuisine R WHERE R.date_ajout < "' . $date_sql[2] .'-'. $date_sql[1] .'-'. $date_sql['0'] .'" AND R.id_recette = C.id_recette AND C.id_menu= M.id_menu');
 			while($t = $test->fetch()){
 				echo $t['id_menu'].'<br>';
-			}
+			}*/
 			while ($men = $menus->fetch()){
 				echo '<p> <a href="affichage_menu.php?id_menu='.$men['id_menu'].'">'. $men['nom_menu'].'</a> </p>';
 			}
