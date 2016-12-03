@@ -35,6 +35,12 @@ while($cat = $categories->fetch()){
 <?php 
 
 if(isset($_GET['sucre_sale']) && $_GET['sucre_sale'] == true){
+
+	$recettes = $bdd->query('SELECT R.id_recette,nom_recette FROM Recettes_de_cuisine R, Contenir_ingredients C1, Contenir_ingredients C2 WHERE R.id_recette = C1.id_recette = C2.id_recette AND C1.nom_ingrédient = "miel"');
+	while($rec = $recettes->fetch()){
+		echo '<p> <a href="affichage_recette.php?id_recette='.$rec['id_recette'].'">'. $rec['nom_recette'].'</a> </p>';
+	}
+
 }
 else if(isset($_GET['top']) && $_GET['top'] == true){
 }
