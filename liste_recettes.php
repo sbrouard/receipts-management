@@ -43,6 +43,10 @@ if(isset($_GET['sucre_sale']) && $_GET['sucre_sale'] == true){
 
 }
 else if(isset($_GET['top']) && $_GET['top'] == true){
+	$recettes = $bdd->query('SELECT R.id_recette,nom_recette, COUNT(N.id_recette) AS c FROM Recettes_de_cuisine R, Noter N WHERE R.id_recette = N.id_recette AND N.valeur = 3 GROUP BY N.id_recette HAVING c > 2');
+	while($rec = $recettes->fetch()){
+		echo '<p> <a href="affichage_recette.php?id_recette='.$rec['id_recette'].'">'. $rec['nom_recette'].'</a> </p>';
+	}
 }
 else if(isset($_GET['commune']) && $_GET['commune'] == true){
 }
