@@ -8,6 +8,9 @@
 
 <body>
 
+<?php include("table_matieres.php"); ?>
+<section id="contenu">
+
 <h2>Liste des recettes</h2>
 
 <form method="post" action="./liste_recettes.php">
@@ -112,7 +115,7 @@ else{
 
 
 
-
+</section>
 
 
 </body>

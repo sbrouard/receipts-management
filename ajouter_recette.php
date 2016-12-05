@@ -17,7 +17,8 @@ if(!isset($_SESSION['pseudo'])){
 <!-- Fomulaire de déclaration d'une recette -->
 
 <body>
-	
+<?php include("table_matieres.php"); ?>
+<section id="contenu">
 <form method="post" action="#">
 	
 <label for="nom_recette"><b>Titre de la recette: </b></label><input name="nom_recette" id="nom_recette" type="text" maxlength="255" required="required"/> <br />
@@ -135,7 +136,7 @@ function nouvel_ingredient(){
 
 </script>
 
-	
+</section>
 	
 </body>
 

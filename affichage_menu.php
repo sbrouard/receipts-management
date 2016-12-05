@@ -7,7 +7,8 @@
 <?php include("head_html.php"); ?>
 
 <body>
-	
+<?php include("table_matieres.php"); ?>
+<section id="contenu">
 <?php	
 // On récupère le contenu du menu dans la table Menu
 $menus = $bdd->query('SELECT M.id_menu, M.nom_menu, I.pseudo
@@ -46,6 +47,6 @@ while($cat = $catégories->fetch()){
 	
 		
 ?>
-	
+</section>
 </body>
 </html>

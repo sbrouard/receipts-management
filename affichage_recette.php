@@ -7,7 +7,8 @@
 <?php include("head_html.php"); ?>
 
 <body>
-	
+<?php include("table_matieres.php"); ?>
+<section id="contenu">
 <br>
 <!-- Revenir à la liste des recettes -->
 <a href="liste_recettes.php">Revenir à la liste des recettes</a><br>
@@ -275,7 +276,7 @@ if(!$already_comment && isset($_SESSION) && !empty($_SESSION)){
 
 ?>
 
-
+</section>
 	
 </body>
 </html>

@@ -8,6 +8,9 @@
 
 <body>
 
+<?php include("table_matieres.php"); ?>
+<section id="contenu">
+
 <h2>Liste des menus</h2>
 
 
@@ -76,6 +79,7 @@ else{
 
 ?>
 
+</section>
 </body>
 
 </html>
