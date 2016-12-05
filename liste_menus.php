@@ -50,15 +50,17 @@ if(isset($_POST['date']) && !empty($_POST['date'])){
 }
 
 if(isset($_POST['kcal_max']) && !empty($_POST['kcal_max'])){
-	$menus_peu_cal = $bdd->query('SELECT nom_menu, id_menu FROM Menu 
-										WHERE nom_menu NOT IN 
-										(SELECT Menu.nom_menu FROM Menu, Contenir_recette, Contenir_ingredients, Avoir_Caracteristiques A, Ingredients I
-										WHERE Menu.id_menu = Contenir_recette.id_menu 
-										AND Contenir_recette.id_recette = Contenir_ingredients.id_recette 
-										AND Contenir_ingredients.nom_ingrédient = A.nom_ingredient 
-										AND I.nom_ingredient = A.nom_ingredient
-										AND ((A.nom_caracteristique="Calories" AND A.valeur>='.$_POST['kcal_max'].') 
-										OR (I.nom_ingredient NOT IN (SELECT nom_ingredient FROM Avoir_Caracteristiques WHERE nom_caracteristique="Calories"))))');
+	$menus_peu_cal = $bdd->query('SELECT DISTINCT Contenir_recette.id_menu, Menu.nom_menu 
+								FROM Contenir_recette INNER JOIN Menu
+								ON Contenir_recette.id_menu = Menu.id_menu 
+								WHERE Contenir_recette.id_menu NOT IN
+								(SELECT id_menu FROM Contenir_recette 
+								WHERE id_recette IN(SELECT Recettes_de_cuisine.id_recette 
+								FROM Recettes_de_cuisine INNER JOIN Contenir_ingredients
+								ON Recettes_de_cuisine.id_recette=Contenir_ingredients.id_recette
+								WHERE nom_ingrédient IN (SELECT nom_ingredient FROM Ingredients 
+								WHERE nom_ingredient NOT IN (SELECT nom_ingredient FROM Avoir_Caracteristiques WHERE nom_caracteristique="Calories") 
+								OR nom_ingredient NOT IN (SELECT nom_ingredient FROM Avoir_Caracteristiques WHERE nom_caracteristique="Calories" AND valeur<'.$_POST['kcal_max'].'))))');
 	 
 	while ($menu = $menus_peu_cal->fetch()){
 		echo '<p> <a href="affichage_menu.php?id_menu='.$menu['id_menu'].'">'. $menu['nom_menu'].'</a> </p>';
