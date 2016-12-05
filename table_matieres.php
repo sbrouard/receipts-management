@@ -4,6 +4,11 @@
 
 <a href="index.php"><img src="./images/logo.png" title="Captain Cook" /></a>
 
+<?php
+if(isset($_SESSION['pseudo'])){
+	echo "<div id='pseudo_head'><a href='mon_compte.php' title='Mon compte'>". $_SESSION['pseudo'] ."</a></div>";
+}
+?>
 </header>
 
 
@@ -16,7 +21,7 @@
 echo '<nav><ul>';
 if(isset($_SESSION['pseudo'])){
 	echo 
-		'<li></li><a href="liste_recettes.php">Liste des recettes</a> </li>
+		'<li><a href="liste_recettes.php">Liste des recettes</a> </li>
 		<li> <a href="liste_menus.php">Liste des menus</a> </li>
 		<li> <a href="ajouter_recette.php"> Ajouter une recette</a> </li>
 		<li> <a href="ajouter_menu.php">Ajouter un menu</a></li>

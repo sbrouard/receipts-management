@@ -33,6 +33,24 @@ header img{
 	width:8%;
 }
 
+header #pseudo_head{
+	color:#D3D4D4;
+	font-size:25px;
+	font-weight:bold;
+	text-decoration:underline;
+	position:absolute;
+	right:2%;
+	top:42%;
+	
+}
+
+header #pseudo_head:hover{
+		font-size:26px;
+}
+
+header #pseudo_head a{
+	color:#D3D4D4;
+}
 
 nav{
 	z-index:1;
@@ -44,12 +62,12 @@ nav{
 	margin:0;
 	padding:0;
 	padding-top:10%;
-	width:19.5%;
+	width:20%;
 	background-color:#E7814E;
 }
 
 nav ul{
-	padding-left:9%;
+	padding-left:6%;
 	padding-right:6%;
 	text-align:center;
 }
@@ -85,8 +103,8 @@ section, #contenu{
 .caracteristique
 {
 	position: absolute;
-	left: -100px;
-	top: -100px;
+	left: -500px;
+	top: -500px;
 	border: 3px black solid;
 	background-color: beige;
 }
