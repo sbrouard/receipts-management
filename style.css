@@ -1,3 +1,34 @@
+nav{
+	position:fixed;
+	top: -20px;
+	left: -10px;
+	height:100%;
+	border-right: solid black;
+	margin:0;
+	padding:0;
+	padding-top:10%;
+	width:18%;
+	background-color:#E7814E;
+}
+
+nav ul{
+	padding-left:9%;
+	padding-right:6%;
+	text-align:center;
+}
+
+nav li{
+	margin-top:50px;
+	list-style-type:none;
+	margin-left:0;
+	font-size:22px;
+	font-weight:bold;
+}	
+
+nav a{
+	text-decoration:none;
+}
+
 .caracteristique
 {
 	position: absolute;
