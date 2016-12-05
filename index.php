@@ -9,7 +9,7 @@
 <body>
 
 <?php include("table_matieres.php"); ?>
-
+<section id="contenu">
 <p> 
 	<h3>Bienvenue sur Captain Cook !</h3><br> 
 	Sur le menu de gauche, vous pouvez accéder aux meilleures recettes proposées par nos internautes, ainsi qu'aux meilleures sélections de menus divers et variés. <br>
@@ -17,7 +17,7 @@
 	A bientôt !
 	<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 </p>
-
+</section>
 </body>
 
 </html>

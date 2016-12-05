@@ -7,6 +7,8 @@
 <?php include("head_html.php"); ?>
 
 <body>
+<?php include("table_matieres.php"); ?>
+<section id="contenu">
 	
 <h3 id="truc">Nombre de recettes créées par catégorie depuis le début de l'année :</h3><br>
 	
@@ -75,5 +77,6 @@ if(isset($_SESSION['pseudo'])){
 	
 ?>
 		
+</section>		
 </body>
 </html>

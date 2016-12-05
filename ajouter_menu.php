@@ -13,7 +13,8 @@ if(!isset($_SESSION['pseudo'])){
 <?php include("head_html.php"); ?>
 
 <body>
-	
+<?php include("table_matieres.php"); ?>
+<section id="contenu">
 <br>
 
 
@@ -112,7 +113,7 @@ function ajouter_recette(){
 </script>
 
 
-
+</section>
 
 </body>
 

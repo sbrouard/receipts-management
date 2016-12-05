@@ -17,6 +17,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
 <?php include("head_html.php"); ?>
 
 <body>
+<?php include("table_matieres.php"); ?>
+<section id="contenu">
 	
 <h2>Modifier mon mot de passe :</h2>
 
@@ -103,7 +105,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
 ?>
 	
 
-	
+</section>	
 </body>
 
 </html>

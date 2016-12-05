@@ -10,6 +10,8 @@ include("ouvrir_base.php"); ?>
 
 <body>
 
+<?php include("table_matieres.php"); ?>
+<section id="contenu">
 
 <h2>Identification</h2>
 
@@ -54,7 +56,7 @@ else{
 }
 ?>
 
-
+</section>
 
 </body>
 
