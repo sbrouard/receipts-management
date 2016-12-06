@@ -56,10 +56,10 @@ $sous_req1 = '';
 
 //if(isset($_GET['sucre_sale']) && $_GET['sucre_sale'] == true){
 if(isset($_POST['sucre_sale']) && $_POST['sucre_sale'] == true){
-	$sucre_sale = 'SELECT R.id_recette,nom_recette FROM Recettes_de_cuisine R, Contenir_ingredients C1, Contenir_ingredients C2 WHERE R.id_recette = C1.id_recette = C2.id_recette AND C1.nom_ingrédient = "miel"';
+	$sucre_sale = 'SELECT RCS.id_recette,nom_recette FROM Recettes_de_cuisine RCS, Contenir_ingredients C1, Contenir_ingredients C2 WHERE RCS.id_recette = C1.id_recette = C2.id_recette AND C1.nom_ingrédient = "miel"';
 }
 if(isset($_POST['top']) && $_POST['top'] == true){
-	$top = 'SELECT R.id_recette,nom_recette, COUNT(N.id_recette) AS c FROM Recettes_de_cuisine R, Noter N WHERE R.id_recette = N.id_recette AND N.valeur = 3 GROUP BY N.id_recette HAVING c > 2';
+	$top = 'SELECT RCT.id_recette,nom_recette, COUNT(N.id_recette) AS c FROM Recettes_de_cuisine RCT, Noter N WHERE RCT.id_recette = N.id_recette AND N.valeur = 3 GROUP BY N.id_recette HAVING c > 2';
 }
 if(isset($_POST['commune']) && $_POST['commune'] == true){
 	$com_menus = 'SELECT R1.id_recette,nom_recette, COUNT(M1.id_recette) AS nb_menus FROM Recettes_de_cuisine R1, Contenir_recette M1 WHERE R1.id_recette = M1.id_recette GROUP BY M1.id_recette HAVING nb_menus > 2';
@@ -118,10 +118,10 @@ if ($nb_req == 1){
 	$sous_req1 = $req1;
 }
 else if ($nb_req == 2){
-	$sous_req1 = 'SELECT * FROM ('. $req1 .') AS REQ1 INNER JOIN ('. $req2 .') AS REQ2 ON REQ1.id_recette = REQ2.id_recette';
+	$sous_req1 = 'SELECT REQ1.* FROM ('. $req1 .') AS REQ1 INNER JOIN ('. $req2 .') AS REQ2 ON REQ1.id_recette = REQ2.id_recette';
 }
 else if ($nb_req == 3){//reste à faire 
-		$sous_req1 = 'SELECT * FROM ('. $req1 .') AS REQ1 
+		$sous_req1 = 'SELECT REQ1.* FROM ('. $req1 .') AS REQ1 
 		INNER JOIN (SELECT REQ2.* FROM ('. $req2 .') AS REQ2 
 			INNER JOIN ('. $req3 .') AS REQ3 
 			ON REQ2.id_recette = REQ3.id_recette) AS REQ4
@@ -200,7 +200,7 @@ $sous_req2 = 'SELECT R.id_recette,nom_recette FROM '. $from . $where;
 // On réuni les "petites" requêtes en la requête principale:
 $requette = '';
 if ($nb_req > 0){
-$requette = 'SELECT * FROM ('. $sous_req1 .') AS SOUS_REQ1
+$requette = 'SELECT SOUS_REQ1.* FROM ('. $sous_req1 .') AS SOUS_REQ1
 						INNER JOIN ('. $sous_req2 .') AS SOUS_REQ2 ON SOUS_REQ1.id_recette = SOUS_REQ2.id_recette';
 }
 else{
@@ -210,6 +210,7 @@ else{
 
 
 $recettes = $bdd->query($requette);
+
 
 // affichage du résultat ligne par ligne sous forme de lien
 while ($rec = $recettes->fetch()){
