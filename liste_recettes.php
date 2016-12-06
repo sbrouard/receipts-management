@@ -15,21 +15,44 @@
 
 <form method="post" action="./liste_recettes.php">
 <label for="categorie">Sélectionner les recettes de la catégorie: </label><select name="categorie" id="categorie">
-<option value="toutes" selected>Toutes les gatégories
+<option value="toutes" <?php if(!isset($_POST['categorie']) || $_POST['categorie']) echo "selected"; ?>>Toutes les gatégories
 <?php 
 $categories = $bdd->query('SELECT nom_categorie FROM Categories'); 
 while($cat = $categories->fetch()){
-	echo "<option value='" . $cat['nom_categorie'] ."'>". $cat['nom_categorie'];
+	echo "<option value='" . $cat['nom_categorie'] ."'";
+	if (isset($_POST['categorie']) && $_POST['categorie'] ==  $cat['nom_categorie']) 
+		echo " selected";
+	echo ">". $cat['nom_categorie'];
 }
 ?>
 </select>
 <span title="laisser vide pour ignorer">
-<label for="nb_personnes">pour: </label><input type="number" name="nb_personnes" id="nb_personnes" min=0 style="width:50px;" /><label for="nb_personnes">personnes </label>
-<label for="date">ajoutées après le: </label><input type="date" name="date" id="date" placeholder="jj/mm/aaaa" maxlength="10" style="width:80;"/>
+<label for="nb_personnes">pour: </label><input type="number" name="nb_personnes" id="nb_personnes" min=0 style="width:50px;" 
+<?php if(isset($_POST['nb_personnes']))
+	echo "value='". $_POST['nb_personnes'] ."'";
+?>
+/><label for="nb_personnes">personnes </label>
+<label for="date">ajoutées après le: </label><input type="date" name="date" id="date" placeholder="jj/mm/aaaa" maxlength="10" style="width:80;"
+<?php if(isset($_POST['date']))
+	echo "value='". $_POST['date'] ."'";
+?>
+/>
 </span><br />
-<label for="sucre_sale">Sélectionner seulement les recettes sucré-salé</label><input type="checkbox" name="sucre_sale" id="sucre_sale" /> <br />
-<label for="top">Sélectionner seulement les recettes les plus populaires</label><input type="checkbox" name="top" id="top" /> <br />
-<label for="commune">Sélectionner seulement les recettes les plus utilisées</label><input type="checkbox" name="commune" id="commune" /> <br />
+<label for="sucre_sale">Sélectionner seulement les recettes sucré-salé</label><input type="checkbox" name="sucre_sale" id="sucre_sale" 
+<?php if(isset($_POST['sucre_sale']) && $_POST['sucre_sale'] == true)
+	echo " checked";
+?>
+/> <br />
+<label for="top">Sélectionner seulement les recettes les plus populaires</label><input type="checkbox" name="top" id="top" 
+<?php if(isset($_POST['top']) && $_POST['top'] == true)
+	echo " checked";
+?>
+/> <br />
+<label for="commune">Sélectionner seulement les recettes les plus utilisées</label><input type="checkbox" name="commune" id="commune" 
+<?php if(isset($_POST['commune']) && $_POST['commune'] == true)
+	echo " checked";
+?>
+/> <br />
 
 <input type="submit" value="Sélectionner" />
 </form>
