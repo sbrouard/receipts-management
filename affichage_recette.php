@@ -10,8 +10,7 @@
 <?php include("table_matieres.php"); ?>
 <section id="contenu">
 <br>
-<!-- Revenir à la liste des recettes -->
-<a href="liste_recettes.php">Revenir à la liste des recettes</a><br>
+
 	
 <!-- Revenir à la recette initiale -->
 <a href="affichage_recette.php?id_recette=<?php echo $_GET['id_recette'] ?>">Revenir à l'affichage de départ de la recette</a><br>
