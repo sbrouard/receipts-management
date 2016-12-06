@@ -207,11 +207,9 @@ else{
 	$requette = $sous_req2;
 }
 
-echo $requette .'<br><br>';
+
+
 $recettes = $bdd->query($requette);
-
-
-
 
 // affichage du résultat ligne par ligne sous forme de lien
 while ($rec = $recettes->fetch()){
