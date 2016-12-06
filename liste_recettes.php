@@ -35,9 +35,6 @@ while($cat = $categories->fetch()){
 </form>
 
 <br>
-<a href="./liste_recettes.php?sucre_sale=true" title="consulter les recettes contenant du sucre et du miel">Consulter les recettes "sucré-salé"</a><br><br>
-<a href="./liste_recettes.php?top=true" title="top">Consulter les recettes les plus populaires</a><br><br>
-<a href="./liste_recettes.php?commune=true" title="recettes communes">Consulter les recettes les plus utilisées</a><br>
 <br><br><br>
 <?php 
 
