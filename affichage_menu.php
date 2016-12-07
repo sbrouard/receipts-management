@@ -44,6 +44,9 @@ while($cat = $catégories->fetch()){
 
 }
 
+
+
+
 // Récupération du pseudo de la personne ayant créé le menu
 $t_pseudo = $bdd->query('SELECT DISTINCT pseudo 
 						FROM Menu INNER JOIN Internaute 
@@ -52,14 +55,45 @@ $t_pseudo = $bdd->query('SELECT DISTINCT pseudo
 						
 $pseudo = $t_pseudo->fetch();
 
+
+
+
 // Lien vers la modification du menu si l'utilisateur connecté est le créateur du menu
 if(isset($_SESSION['pseudo']) && !empty($_SESSION['pseudo']) && ($_SESSION['pseudo'] == $pseudo['pseudo']) && !isset($_GET['modif'])){
 	echo '<br><br><a href="affichage_menu.php?id_menu='.$_GET['id_menu'].'&modif=1">Modifier mon menu</a>';
 }
 
+
+
+// Lien vers la suppression du menu si l'utilisateur connecté est le créateur du menu
+if(isset($_SESSION['pseudo']) && !empty($_SESSION['pseudo']) && ($_SESSION['pseudo'] == $pseudo['pseudo']) && !isset($_GET['modif'])){?>
+	
+	<br><br>
+	<form method="post" action="#">
+	<label for="confirmer">Supprimer le menu: </label>
+	<input type ="checkbox" name="confirmer" id="confirmer" required>
+	<br>
+	<input type="submit" value="Confirmer la suppression du menu">
+	</form>
+
+<?php }
+
+
+
+
+// Formulaire de suppression du menu
+if(isset($_POST['confirmer'])){
+	$bdd->exec('DELETE FROM Menu where id_menu='.$_GET['id_menu']);
+	header('Location: liste_menus.php');
+}
+
+
+
 // Formulaire de modification du menu
 if(isset($_GET['modif'])){
-	// Ajouter recette
+	
+	
+	// Ajouter recette dans le menu
 					
 					// On récupère le contenu de la table Categories
 				$categories = $bdd->query('SELECT nom_categorie FROM Categories');
@@ -72,7 +106,10 @@ if(isset($_GET['modif'])){
 					echo '<optgroup label="' . $rec['nom_categorie'] . '">';
 					
 					// On récupère les recettes appartenant à chaque catégorie 
-					$recettes = $bdd->query('SELECT Recettes_de_cuisine.id_recette AS id_recette,nom_recette FROM Recettes_de_cuisine, Appartenir_catégorie WHERE Recettes_de_cuisine.id_recette = Appartenir_catégorie.id_recette AND Appartenir_catégorie.nom_catégorie = \''. $rec['nom_categorie'] .'\'' );
+					$recettes = $bdd->query('SELECT Recettes_de_cuisine.id_recette AS id_recette,nom_recette 
+											FROM Recettes_de_cuisine, Appartenir_catégorie 
+											WHERE Recettes_de_cuisine.id_recette = Appartenir_catégorie.id_recette 
+											AND Appartenir_catégorie.nom_catégorie = \''. $rec['nom_categorie'] .'\'' );
 					//On affiche les lignes une à une:
 					while ($rec = $recettes->fetch()){
 							echo '<option value="' . $rec['id_recette'] .','.$rec['nom_recette'].'">' . $rec['nom_recette'];
@@ -84,30 +121,30 @@ if(isset($_GET['modif'])){
 
 					echo '</select>   </p>';
 	
-	// Enlever recette
+	// Enlever recette du menu
+	
 }
 
+
+
+
+
+
 ?>
+<!-- Affichage des recettes sélectionnées (voir js)-->
 <p id="recettes_menu">
 
 </p>
 
 
 
-
-
-
-
-
-
-<!-- A comprendre -->
 <?php if(isset($_GET['modif'])){ ?>
 	
 <form method="post" action="#" id="form" >
-	<input type="hidden" name="nom_menu" id="nom_menu_form" value="" required="required" />
+	<input type="hidden" name="nom_menu" id="nom_menu_form" value="<?php echo $nom_menu; ?>" required="required" />
 	<input type="hidden" name="nb_recettes" id="nb_recettes" value="0" />
+	<input type="submit" value="Ajouter les recettes selectionnées">
 </form>
-<button onclick="modifier_menu()">Ajouter les recettes sélectionnées</button>
 
 <?php } ?>
 
@@ -120,24 +157,18 @@ if(isset($_GET['modif'])){
 
 
 <?php
-// a comprendre
+// Formulaire d'insertion de nouvelles recettes
 if(isset($_POST['nb_recettes'])){
 	if($_POST['nb_recettes'] <= 0){
 		echo "Veuillez entrer au moins une recette<br>";
 	}
 	else{
-		$result_id = $bdd->query('SELECT id_internaute FROM Internaute WHERE pseudo = "' . $_SESSION['pseudo'] .'"');
-		$id_internaute = $result_id->fetch();
-		$id_internaute = $id_internaute['id_internaute'];
-		$bdd->exec('INSERT INTO Menu(nom_menu,id_internaute) VALUES("' . $_POST['nom_menu'] .'","'. $id_internaute .'")');
-		$menu_id=$bdd->lastInsertId();
 		for($i = 1; $i < $_POST['nb_recettes']+1;$i++){
 			if(isset($_POST['recette' . $i])){
-				$bdd->exec('INSERT INTO Contenir_recette(id_recette,id_menu) VALUES("' . $_POST['recette' . $i] .'","' . $menu_id .'")'); 
-				
+				$bdd->exec('INSERT INTO Contenir_recette(id_recette,id_menu) VALUES("' . $_POST['recette' . $i] .'","' . $_GET['id_menu'] .'")'); 	
 			}
 		}
-		echo "Le menu a bien été créé<br>";
+		header('Location: affichage_menu.php?id_menu='.$_GET['id_menu']);
 	}
 	
 }
@@ -152,23 +183,13 @@ if(isset($_POST['nb_recettes'])){
 
 
 
-
-
-
-
 <script>
+// script d'ajout de recettes dans le formulaire à envoyer
 var nb_recettes = 0;
 
-// A changer
-function modifier_menu(){
-	document.getElementById("nom_menu_form").value = document.getElementById("nom_menu").value;
-	document.getElementById('form').submit();
-}
-
-// a comprendre
 function ajouter_recette(){
 	nb_recettes++;
-	var value = document.getElementById('recettes').value.split(',');
+	var value = document.getElementById('recettes').value.split(','); // probleme: l'id recette n'a pas de value
 	document.getElementById('recettes_menu').innerHTML += value[1] +  '<br>';
 	document.getElementById('form').innerHTML += "<input type='hidden' name='recette"+nb_recettes+"' value='" + value[0] + "' /> <br>";
 	document.getElementById('nb_recettes').value = nb_recettes;
