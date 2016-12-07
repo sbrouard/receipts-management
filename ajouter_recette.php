@@ -93,7 +93,7 @@ if(isset($_POST['nom_recette']) && isset($_POST['categorie']) && isset($_POST['n
 			if(!$exists['ingredient_exists']){ // Si l'ingredient n'est pas deja dans la base, on le rajoute
 				$bdd->exec('INSERT INTO Ingredients(nom_ingredient) Values(LOWER("' . $_POST['ingredient' . $i] .'"))');
 			}
-			$bdd->exec('INSERT INTO Contenir_ingredients(unité,valeur,id_recette,nom_ingrédient) VALUES("' . $_POST['unite' . $i] . '","' . $_POST['quantite' . $i] . '","' . $recette_id .'", LOWER("' . $_POST['ingredient' . $i] .'"))'); 
+			$bdd->exec('INSERT INTO Contenir_ingredients(unite,valeur,id_recette,nom_ingrédient) VALUES("' . $_POST['unite' . $i] . '","' . $_POST['quantite' . $i] . '","' . $recette_id .'", LOWER("' . $_POST['ingredient' . $i] .'"))'); 
 		}
 	}
 	
