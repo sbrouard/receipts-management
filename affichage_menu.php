@@ -38,7 +38,7 @@ while($cat = $catégories->fetch()){
 	
 	// On les affiche 
 	while($rec = $recettes->fetch()){
-		echo '<p> <a href="affichage_recette.php?id_recette='.$rec['id_recette'].'">'. $rec['nom_recette'].'</a> </p>';
+		echo '<p> <a style="display:inline-block;" class="opt_supprimer" id="opt,'.$rec['id_recette'].'" href="affichage_recette.php?id_recette='.$rec['id_recette'].'">'. $rec['nom_recette'].'</a> </p>';
 	}
 	echo '</span>';
 
@@ -56,11 +56,11 @@ $t_pseudo = $bdd->query('SELECT DISTINCT pseudo
 $pseudo = $t_pseudo->fetch();
 
 
-
+echo '<div style="border: 2px solid black; width: 270px; padding-left:20px;">';
 
 // Lien vers la modification du menu si l'utilisateur connecté est le créateur du menu
 if(isset($_SESSION['pseudo']) && !empty($_SESSION['pseudo']) && ($_SESSION['pseudo'] == $pseudo['pseudo']) && !isset($_GET['modif'])){
-	echo '<br><br><a href="affichage_menu.php?id_menu='.$_GET['id_menu'].'&modif=1">Modifier mon menu</a>';
+	echo '<br><a href="affichage_menu.php?id_menu='.$_GET['id_menu'].'&modif=1">Modifier mon menu</a>';
 }
 
 
@@ -78,6 +78,7 @@ if(isset($_SESSION['pseudo']) && !empty($_SESSION['pseudo']) && ($_SESSION['pseu
 
 <?php }
 
+echo '</div>';
 
 
 
@@ -98,6 +99,7 @@ if(isset($_GET['modif'])){
 					// On récupère le contenu de la table Categories
 				$categories = $bdd->query('SELECT nom_categorie FROM Categories');
 				//On affiche les lignes une à une:
+				echo '<br><div style="border: 2px solid black; width: 270px; padding-left:20px;">';
 				echo '<p>  <label for="recettes">Quelle recette souhaitez-vous ajouter ?</label><br />' ;
 				echo ' <select name="recettes" id="recettes" onchange="ajouter_recette();"> <option disabled selected>Ajouter une recette</option>' ;
 
@@ -120,8 +122,6 @@ if(isset($_GET['modif'])){
 				}    
 
 					echo '</select>   </p>';
-	
-	// Enlever recette du menu
 	
 }
 
@@ -146,7 +146,9 @@ if(isset($_GET['modif'])){
 	<input type="submit" value="Ajouter les recettes selectionnées">
 </form>
 
-<?php } ?>
+<?php } 
+echo '</div>';
+?>
 
 
 
@@ -175,11 +177,35 @@ if(isset($_POST['nb_recettes'])){
 
 ?>
 
+<?php
+// Traitement du formulaire de suppression d'une recette du menu
+$ids_recettes_presentes = $bdd->query('SELECT id_recette FROM Contenir_recette WHERE id_menu='.$_GET['id_menu']);
+			//Pour toutes les recettes du menu
+			while($id_recette_presente = $ids_recettes_presentes->fetch()){
+				// si la recette a été supprimée 
+				if(isset($_POST['post_id_recette'.$id_recette_presente['id_recette']])){
+					$bdd->exec('DELETE FROM Contenir_recette WHERE id_recette='.$id_recette_presente['id_recette']);
+					header('Location: affichage_menu.php?id_menu='.$_GET['id_menu']);
+				}
+			}
+?>
 
+<?php if(isset($_GET['modif'])){ ?>
+	
+		<script>
+			var recettes = document.querySelectorAll('.opt_supprimer');
+			for(var i=0; i<recettes.length; i++){
+				var newSup = document.createElement('form');
+				var id = recettes[i].id.split(',')[1];
+				newSup.method = 'post';
+				newSup.action = '#';
+				newSup.style = 'display: inline-block;';
+				newSup.innerHTML = '<input type="hidden" name="post_id_recette'+id+'"><input type="submit" value="Supprimer" style="font-size:10px;">';
+				recettes[i].parentNode.appendChild(newSup);
+			}
+		</script>
 
-
-
-
+<?php } ?>
 
 
 
@@ -189,7 +215,7 @@ var nb_recettes = 0;
 
 function ajouter_recette(){
 	nb_recettes++;
-	var value = document.getElementById('recettes').value.split(','); // probleme: l'id recette n'a pas de value
+	var value = document.getElementById('recettes').value.split(',');
 	document.getElementById('recettes_menu').innerHTML += value[1] +  '<br>';
 	document.getElementById('form').innerHTML += "<input type='hidden' name='recette"+nb_recettes+"' value='" + value[0] + "' /> <br>";
 	document.getElementById('nb_recettes').value = nb_recettes;
