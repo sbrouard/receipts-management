@@ -56,10 +56,11 @@ $t_pseudo = $bdd->query('SELECT DISTINCT pseudo
 $pseudo = $t_pseudo->fetch();
 
 
-echo '<div style="border: 2px solid black; width: 270px; padding-left:20px;">';
+
 
 // Lien vers la modification du menu si l'utilisateur connecté est le créateur du menu
 if(isset($_SESSION['pseudo']) && !empty($_SESSION['pseudo']) && ($_SESSION['pseudo'] == $pseudo['pseudo']) && !isset($_GET['modif'])){
+	echo '<div style="border: 2px solid black; width: 270px; padding-left:20px;">';
 	echo '<br><a href="affichage_menu.php?id_menu='.$_GET['id_menu'].'&modif=1">Modifier mon menu</a>';
 }
 
@@ -69,16 +70,17 @@ if(isset($_SESSION['pseudo']) && !empty($_SESSION['pseudo']) && ($_SESSION['pseu
 if(isset($_SESSION['pseudo']) && !empty($_SESSION['pseudo']) && ($_SESSION['pseudo'] == $pseudo['pseudo']) && !isset($_GET['modif'])){?>
 	
 	<br><br>
-	<form method="post" action="#">
-	<label for="confirmer">Supprimer le menu: </label>
-	<input type ="checkbox" name="confirmer" id="confirmer" required>
+	<form method="post" action="#" onsubmit="return confirm('Etes-vous sur de votre choix ?');">
+	<input type="hidden" name="confirmer" id="confirmer">
 	<br>
-	<input type="submit" value="Confirmer la suppression du menu">
+	<input type="submit" value="Supprimer le menu">
 	</form>
+	
+<?php echo '</div>'; ?>
 
 <?php }
 
-echo '</div>';
+
 
 
 
@@ -214,12 +216,14 @@ $ids_recettes_presentes = $bdd->query('SELECT id_recette FROM Contenir_recette W
 var nb_recettes = 0;
 
 function ajouter_recette(){
-	nb_recettes++;
-	var value = document.getElementById('recettes').value.split(',');
-	document.getElementById('recettes_menu').innerHTML += value[1] +  '<br>';
-	document.getElementById('form').innerHTML += "<input type='hidden' name='recette"+nb_recettes+"' value='" + value[0] + "' /> <br>";
-	document.getElementById('nb_recettes').value = nb_recettes;
-	}
+	if(/*pas deja selectionné*/){
+		nb_recettes++;
+		var value = document.getElementById('recettes').value.split(',');
+		document.getElementById('recettes_menu').innerHTML += value[1] +  '<br>';
+		document.getElementById('form').innerHTML += "<input type='hidden' name='recette"+nb_recettes+"' value='" + value[0] + "' /> <br>";
+		document.getElementById('nb_recettes').value = nb_recettes;
+}
+}
 </script>
 
 
