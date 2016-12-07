@@ -18,7 +18,7 @@ if(!isset($_SESSION['pseudo'])){
 <br>
 
 
-<label for="nom_menu1"><b>Titre du menu: </b></label><input name="nom_menu1" id="nom_menu" type="text" maxlength="255" required="required" value=""/> <br />
+<label for="nom_menu1"><b>Titre du menu: </b></label><input name="nom_menu1" id="nom_menu" type="text" maxlength="255" required value=""/> <br />
 
 
 <?php 
@@ -57,7 +57,7 @@ while ($rec = $categories->fetch()){
 </p>
 	
 <form method="post" action="#" id="form" >
-	<input type="hidden" name="nom_menu" id="nom_menu_form" value="" required="required" />
+	<input type="hidden" name="nom_menu" id="nom_menu_form" value="" required />
 	<input type="hidden" name="nb_recettes" id="nb_recettes" value="0" />
 </form>
 <button onclick="creer_menu()">Créer le menu</button>
