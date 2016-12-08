@@ -110,3 +110,37 @@ section[id=contenu] h2{
 	border: 3px black solid;
 	background-color: beige;
 }
+
+.nom_catégorie
+{
+	text-align: center;
+	font-size: x-large;
+	font-style: italic;
+	font-weight: bold;
+	}
+
+h3
+{
+	text-align: center;
+	font-size: xx-large;
+	font-weight: bold;
+}
+	
+p{
+text-align: center;
+	
+}
+
+#gras{
+font-weight: bold;
+}
+
+.comment{
+
+    border: 2px black solid;
+    width: 600px;
+    padding: 4px;
+    border-radius: 10px;
+}
+
+

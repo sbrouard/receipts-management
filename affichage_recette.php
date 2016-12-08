@@ -40,10 +40,10 @@ $ingredients = $bdd->query('SELECT *
 
 // Affichage de la recette
 echo '<h3 id="truc">'. $rec['nom_recette'].' (Ajoutée le ' . $rec['date_ajout_fr'] . ' par '. $rec['pseudo'] . ')</h3><br>';
-echo 'Nombre de personnes : '. $rec['nombre_personnes']. '<br>';
-echo 'Temps de préparation : '. $rec['temps_prepa']. '<br>';
-echo 'Temps de cuisson : '. $rec['temps_cuiss']. '<br>';
-echo 'Ingrédients nécessaires <i>(survoler pour avoir les caracteristiques)</i>: ';
+echo '<span id= "gras" > Nombre de personnes </span> : '. $rec['nombre_personnes']. '<br>';
+echo '<span id= "gras" > Temps de préparation </span> : '. $rec['temps_prepa']. '<br>';
+echo '<span id= "gras" > Temps de cuisson </span> : '. $rec['temps_cuiss']. '<br>';
+echo '<span id= "gras" > Ingrédients nécessaires </span> <i>(survoler pour avoir les caracteristiques)</i>: ';
 while($ingr = $ingredients->fetch()){
 	
 	// On affiche l'ingrédient
@@ -86,10 +86,10 @@ $descriptions = $bdd->query('SELECT id_description, texte,
 							FROM Descriptions WHERE	id_recette='.$_GET['id_recette'].
 							' ORDER BY date_debut DESC');
 if($description_actuelle = $descriptions->fetch()){
-	echo '<br>Consignes actuelles de préparation de la recette (écrit le '.$description_actuelle['debut_description']. ') : <br>' .$description_actuelle['texte'].'<br><br>';
+	echo '<br><span id= "gras" >Consignes actuelles de préparation de la recette</span> (écrit le '.$description_actuelle['debut_description']. ') : <br>' .$description_actuelle['texte'].'<br><br>';
 }
 else{
-	echo '<br>Consignes actuelles de préparation de la recette: Aucune description n\'est fournie pour cette recette<br>';
+	echo '<br><span id= "gras" >Consignes actuelles de préparation de la recette</span>: Aucune description n\'est fournie pour cette recette<br>';
 }
 
 
@@ -118,7 +118,7 @@ $notation = $bdd->query('SELECT avg(valeur) AS note, count(id_internaute) AS nb_
 					' GROUP BY id_recette');
 
 $note= $notation->fetch();
-echo '<br>Note moyenne: '.$note['note'].'/3 ('.$note['nb_votes'].' votes)<br>';
+echo '<br><span id= "gras" >Note moyenne</span>: '.$note['note'].'/3 ('.$note['nb_votes'].' votes)<br>';
 
 
 
@@ -194,7 +194,7 @@ if((!isset($_GET['modifier_note']) || empty($_GET['modifier_note'])) && (isset($
 
 
 // Affichage des menus dont la recette fait partie
-echo '<br>Menus dont cette recette fait partie: ';
+echo '<br><span id= "gras" >Menus dont cette recette fait partie </span>: ';
 $menus = $bdd->query('SELECT * 
 					FROM (Menu INNER JOIN Contenir_recette 
 					ON Menu.id_menu = Contenir_recette.id_menu) 
@@ -214,7 +214,7 @@ echo '<br>';
 
 
 // Affichage des commentaires
-echo '<br><br><br>Commentaires: <br><br>';
+echo '<br><br><br><span id= "gras" >Commentaires: </span><br><br>';
 $commentaires = $bdd->query('SELECT date, DATE_FORMAT(date, \'%d/%m/%Y à %hh%imin%ss\') AS date_fr,
 							texte, pseudo, id_recette, Internaute.id_internaute
 							FROM Commenter INNER JOIN Internaute
@@ -225,8 +225,8 @@ $already_comment = 0;
 $compteur_fetch = 0;
 while($com = $commentaires->fetch()){
 	$compteur_fetch += 1;
-	echo 'Le '. $com['date_fr'] . ' par ' . $com['pseudo']. ':<br>';
-	echo $com['texte'];
+	echo '<div class = "comment" >Le '. $com['date_fr'] . ' par ' . $com['pseudo']. ':<br>';
+	echo $com['texte'] .'</div>';
 	
 	if(isset($_SESSION) && !empty($_SESSION)){
 		if($com['pseudo']==$_SESSION['pseudo']){
