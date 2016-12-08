@@ -97,7 +97,7 @@ value="<?php echo $rec['temps_cuiss'][3] , $rec['temps_cuiss'][4]; ?>" />min<br 
 <table id="list_ingredients">
 	<tr><td><label for="ingredient"><b>Ingrédients: </b></label></td></tr>
 <?php	
-	$nb_ingr = -1;
+	$nb_ingr = 0;
 	for($nb_ingr = 1; $ingr=$ingredients->fetch();$nb_ingr++){
 		echo '<tr><td><input name="ingredient'. $nb_ingr .'" id="ingredient" type="text" maxlength="255" placeholder="nom de l\'ingrédient" required value="'. $ingr['nom_ingrédient'] .'"/>
 		<input name="quantite'. $nb_ingr .'" type="number" min="0" placeholder="quantité" required style="width:80px;"value="'. $ingr['valeur'] .'"/>
@@ -107,7 +107,7 @@ value="<?php echo $rec['temps_cuiss'][3] , $rec['temps_cuiss'][4]; ?>" />min<br 
 	
 	
 <input type="hidden" name="nb_ingredients" id="nb_ingredients" required value="1"/>
-<span onclick="nouvel_ingredient();">Ajouter un nouvel ingrédient</span><br />
+<span onclick="nouvel_ingredient2();">Ajouter un nouvel ingrédient</span><br />
 
 <input type="submit">
 
@@ -184,7 +184,7 @@ else if($_SERVER['REQUEST_METHOD'] == 'POST'){
 	
 <!-- Fonction JS pour gérer le nombre d'ingrédients dans la recette -->	
 <script>
-var nb_ingredients = 1;
+var nb_ingredients = <?php echo $nb_ingr;?>
 
 function nouvel_ingredient(){
 	nb_ingredients++;
@@ -192,6 +192,31 @@ function nouvel_ingredient(){
 	document.getElementById("nb_ingredients").value = nb_ingredients;
 }
 
+function nouvel_ingredient2(){
+	nb_ingredients++;
+	var new_ingr = document.createElement('tr');
+	
+	var new_column1 = document.createElement('td');
+	
+	var new_nom_ingr = document.createElement('input');
+	new_nom_ingr.name = "ingredient" + nb_ingredients;
+	new_nom_ingr.type = "text";
+	new_nom_ingr.max_length = "255";
+	new_nom_ingr.placeholder = "nom de l'ingrédient";
+	
+	var new_quantite = document.createElement('input');
+	new_quantite.name = "quantite" + nb_ingredents;
+	new_quantite.type = "number";
+	new_quantite.min = "0";
+	new_quantite.placeholder = "quantité";
+	new_quantite.style = "width:80px;";
+	//new_quantite.setT=Attribute("required");
+	
+	new_column1.appendChild(new_nom_ingr);
+	new_ingr.appendChild(new_column1);
+	document.getElementById('list_ingredients').appendChild(new_ingr);
+	
+}
 
 </script>
 
