@@ -98,7 +98,7 @@ if(isset($_GET['anciennes_descriptions']) && !empty($_GET['anciennes_description
 	$compteur_fetch = 0;
 	while($description = $descriptions->fetch()){
 		$compteur_fetch += 1;
-		echo '<br>Description du '.$description['debut_description']. ' au '.$description['fin_description'].' : <br>' .$description['texte'].'<br>';
+		echo '<br><div class = "description" >Description du '.$description['debut_description']. ' au '.$description['fin_description'].' : <br>' .$description['texte'].'<br></div>';
 	}
 	if($compteur_fetch == 0){
 		echo '<br> Aucune autre description <br>';
@@ -203,14 +203,6 @@ while($menu=$menus->fetch()){
 	echo '<a href="affichage_menu.php?id_menu='. $menu['id_menu']. '">' . $menu['nom_menu']. '</a>, ';
 }
 echo '<br>';
-
-
-
-
-
-
-
-
 
 
 // Affichage des commentaires
