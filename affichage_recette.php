@@ -51,13 +51,13 @@ while($ingr = $ingredients->fetch()){
 	
 	// On récupère les caractéristiques nutritionnelles
 	$caracteristiques = $bdd->query('SELECT * FROM Avoir_Caracteristiques WHERE nom_ingredient ="'. $ingr['nom_ingrédient'] .'"');	
-	echo '<span class="caracteristique" id="'.$ingr['nom_ingrédient'].'_hover" style="">';
+	echo '<div class="hidden_elt" id="'.$ingr['nom_ingrédient'].'_hover" style="" hidden>';
 	$compteur_caracteristiques = 0;
 	while($carac = $caracteristiques->fetch()){
 		$compteur_caracteristiques +=1; 
 		echo $carac['nom_caracteristique'] . ' : ' . $carac['valeur'] . ' ' . $carac['unite'].'<br>';
 	}
-	echo '</span>';
+	echo '</div>';
 
 	if($compteur_caracteristiques != 0){
 		echo 
@@ -66,16 +66,11 @@ while($ingr = $ingredients->fetch()){
 				var element = document.getElementById(\''.$ingr['nom_ingrédient'].'\'); 
 				element.addEventListener(\'mouseover\', function(e){
 					var el = document.getElementById(\''. $ingr['nom_ingrédient'].'_hover\');
-					el.style.position = \'absolute\';
-					el.style.left = e.clientX + 30 +\'px\';
-					el.style.top = e.clientY + 30 +\'px\';
-					
+					el.removeAttribute(\'hidden\');
 				});
 				element.addEventListener(\'mouseout\', function(e){
 					var el = document.getElementById(\''.$ingr['nom_ingrédient'].'_hover\');
-					el.style.position = \'absolute\';
-					el.style.left = \'-100px\';
-					el.style.top = \'-100px\';
+					el.hidden=\'1\';
 				});
 			</script> ';
 	}
@@ -288,8 +283,6 @@ if(!$already_comment && isset($_SESSION) && !empty($_SESSION)){
 if(isset($_SESSION['pseudo']) && $rec['pseudo'] == $_SESSION['pseudo']){
 	echo '<br><br><a href="modifier_recette.php?id_recette='.$_GET['id_recette'].'"	>Modifier ma recette</a><br><br>';
 }
-
-
 
 ?>
 
