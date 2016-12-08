@@ -143,4 +143,9 @@ font-weight: bold;
     border-radius: 10px;
 }
 
+#ajouter_ingredient{
+	text-decoration:underline;
+	cursor:pointer;
+}
+
 

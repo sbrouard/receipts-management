@@ -107,7 +107,7 @@ value="<?php echo $rec['temps_cuiss'][3] , $rec['temps_cuiss'][4]; ?>" />min<br 
 	
 	
 <input type="hidden" name="nb_ingredients" id="nb_ingredients" required value="1"/>
-<span onclick="nouvel_ingredient2();">Ajouter un nouvel ingrédient</span><br />
+<span id="ajouter_ingredient" onclick="nouvel_ingredient2();">Ajouter un nouvel ingrédient</span><br />
 
 <input type="submit">
 
@@ -185,13 +185,13 @@ else if($_SERVER['REQUEST_METHOD'] == 'POST'){
 <!-- Fonction JS pour gérer le nombre d'ingrédients dans la recette -->	
 <script>
 var nb_ingredients = <?php echo $nb_ingr;?>
-
+/*
 function nouvel_ingredient(){
 	nb_ingredients++;
 	document.getElementById('list_ingredients').innerHTML += '<tr><td><input name="ingredient' + nb_ingredients + '" type="text" maxlength="255" placeholder="nom de l\'ingrédient" required/>  <input name="quantite' + nb_ingredients + '" type="number" min="0" placeholder="quantité" required style="width:80px;"/>  <input name="unite' + nb_ingredients + '" type="text" maxlength="255" placeholder="unité" style="width:80px;" /></td></tr>';
 	document.getElementById("nb_ingredients").value = nb_ingredients;
 }
-
+*/
 function nouvel_ingredient2(){
 	nb_ingredients++;
 	var new_ingr = document.createElement('tr');
@@ -203,16 +203,28 @@ function nouvel_ingredient2(){
 	new_nom_ingr.type = "text";
 	new_nom_ingr.max_length = "255";
 	new_nom_ingr.placeholder = "nom de l'ingrédient";
+	new_nom_ingr.setAttribute("required","required");
+	
+	new_column1.appendChild(new_nom_ingr);
 	
 	var new_quantite = document.createElement('input');
-	new_quantite.name = "quantite" + nb_ingredents;
+	new_quantite.name = "quantite" + nb_ingredients;
 	new_quantite.type = "number";
 	new_quantite.min = "0";
 	new_quantite.placeholder = "quantité";
 	new_quantite.style = "width:80px;";
-	//new_quantite.setT=Attribute("required");
+	new_quantite.setAttribute("required","required");
 	
-	new_column1.appendChild(new_nom_ingr);
+	new_column1.appendChild(new_quantite);
+	
+	var new_unite = document.createElement('input');
+	new_unite.name = "unite" + nb_ingredients;
+	new_unite.type = "text";
+	new_unite.maxlength = "255";
+	new_unite.style = "width:80px;";
+	
+	new_column1.appendChild(new_unite);
+	
 	new_ingr.appendChild(new_column1);
 	document.getElementById('list_ingredients').appendChild(new_ingr);
 	
