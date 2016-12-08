@@ -29,7 +29,7 @@ $catégories = $bdd->query('SELECT DISTINCT nom_catégorie
 echo '<h3 id="truc">'. $me['nom_menu'].' (Ajouté par '. $me['pseudo'] . ')</h3><br>';
 while($cat = $catégories->fetch()){
 	// On affiche les catégories
-	echo '<u class="nom_catégorie" id="'. $cat['nom_catégorie']. '">' .$cat['nom_catégorie']. ': </u> ';
+	echo '<p class="nom_catégorie" id="'. $cat['nom_catégorie']. '"> ~ ' .$cat['nom_catégorie']. ' ~  </p> ';
 	
 	//On récupère les recettes de la catégorie
 	$recettes = $bdd->query('SELECT R.id_recette, R.nom_recette
