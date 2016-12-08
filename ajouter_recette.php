@@ -47,7 +47,8 @@ while ($cat = $categories->fetch()){
 	<tr><td><label for="ingredient"><b>Ingrédients: </b></label></tr>
 	<tr><td><input name="ingredient1" id="ingredient" type="text" maxlength="255" placeholder="nom de l'ingrédient" required />
 	<input name="quantite1" type="number" min="0" placeholder="quantité" required style="width:80px;"/>
-	<input name="unite1" type="text" maxlength="255" placeholder="unité" style="width:80px;" /></td></tr></table><br>
+	<input name="unite1" type="text" maxlength="255" placeholder="unité" style="width:80px;" />
+	<img src="./images/icone_supprimer.png" height="30" class="icone_supprimer_ingredient" /></td></tr></table><br>
 <input type="hidden" name="nb_ingredients" id="nb_ingredients" required value="1"/>
 <span id="ajouter_ingredient" onclick="nouvel_ingredient2();">Ajouter un nouvel ingrédient</span><br />
 
@@ -168,6 +169,14 @@ function nouvel_ingredient2(){
 	new_unite.style = "width:80px;";
 	
 	new_column1.appendChild(new_unite);
+	
+	var icone = document.createElement('img');
+	icone.src = "./images/icone_supprimer.png";
+	icone.height = "30";
+	icone.className = "icone_supprimer_ingredient";
+	
+	new_column1.appendChild(icone);
+
 	
 	new_ingr.appendChild(new_column1);
 	document.getElementById('list_ingredients').appendChild(new_ingr);

@@ -101,7 +101,8 @@ value="<?php echo $rec['temps_cuiss'][3] , $rec['temps_cuiss'][4]; ?>" />min<br 
 	for($nb_ingr = 1; $ingr=$ingredients->fetch();$nb_ingr++){
 		echo '<tr><td><input name="ingredient'. $nb_ingr .'" id="ingredient" type="text" maxlength="255" placeholder="nom de l\'ingrédient" required value="'. $ingr['nom_ingrédient'] .'"/>
 		<input name="quantite'. $nb_ingr .'" type="number" min="0" placeholder="quantité" required style="width:80px;"value="'. $ingr['valeur'] .'"/>
-		<input name="unite'. $nb_ingr .'" type="text" maxlength="255" placeholder="unité" style="width:80px;" value="'. $ingr['unite'] .'"/></td></tr></table><br>';
+		<input name="unite'. $nb_ingr .'" type="text" maxlength="255" placeholder="unité" style="width:80px;" value="'. $ingr['unite'] .'"/>
+		<img src="./images/icone_supprimer.png" height="30" class="icone_supprimer_ingredient" /></td></tr></table><br>';
 	}
 ?>
 	
@@ -224,6 +225,13 @@ function nouvel_ingredient2(){
 	new_unite.style = "width:80px;";
 	
 	new_column1.appendChild(new_unite);
+	
+	var icone = document.createElement('img');
+	icone.src = "./images/icone_supprimer.png";
+	icone.height = "30";
+	icone.className = "icone_supprimer_ingredient";
+	
+	new_column1.appendChild(icone);
 	
 	new_ingr.appendChild(new_column1);
 	document.getElementById('list_ingredients').appendChild(new_ingr);
