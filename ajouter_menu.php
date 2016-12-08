@@ -102,12 +102,26 @@ function creer_menu(){
 }
 
 function ajouter_recette(){
-	nb_recettes++;
-	var value = document.getElementById('recettes').value.split(',');
-	document.getElementById('recettes_menu').innerHTML += value[1] +  '<br>';
-	document.getElementById('form').innerHTML += "<input type='hidden' name='recette"+nb_recettes+"' value='" + value[0] + "' /> <br>";
-	document.getElementById('nb_recettes').value = nb_recettes;
+	// Verification que l'element n'a pas déjà été sélectionné
+	var already_selected = 0;
+	var value = document.getElementById('recettes').value.split(',')[0]; // id recette qui vient d'etre selectionnee
+	var ids_already_selected = document.querySelectorAll('.already_selected');
+	// verif dans les recettes qui viennent d'etre selectionnees pour l'ajout
+	for(var i=0; i<ids_already_selected.length; i++){
+		if(ids_already_selected[i].value == value){
+			already_seleted += 1;
+		}
 	}
+	
+	// Traitement si l'élément n'a pas déjà été sélectionné
+	if(already_selected == 0){
+		nb_recettes++;
+		var value = document.getElementById('recettes').value.split(',');
+		document.getElementById('recettes_menu').innerHTML += value[1] +  '<br>';
+		document.getElementById('form').innerHTML += "<input type='hidden' class='already_selected' name='recette"+nb_recettes+"' value='" + value[0] + "' /> <br>";
+		document.getElementById('nb_recettes').value = nb_recettes;
+	}
+}
 
 
 </script>

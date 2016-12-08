@@ -104,11 +104,9 @@ section[id=contenu] h2{
 }
 
 
-.caracteristique
+.hidden_elt
 {
-	position: absolute;
-	left: -500px;
-	top: -500px;
+	width: 250px;
 	border: 3px black solid;
 	background-color: beige;
 }
