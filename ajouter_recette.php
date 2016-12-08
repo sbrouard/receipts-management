@@ -44,11 +44,12 @@ while ($cat = $categories->fetch()){
 <label for="description"><b>Description: </b></label><textarea name="description" id="description" maxlength="255" required></textarea><br />
 
 <table id="list_ingredients">
-	<tr><td><label for="ingredient"><b>Ingrédients: </b></label></td><td><input name="ingredient1" id="ingredient" type="text" maxlength="255" placeholder="nom de l'ingrédient" required />
-																		<input name="quantite1" type="number" min="0" placeholder="quantité" required style="width:80px;"/>
-																		<input name="unite1" type="text" maxlength="255" placeholder="unité" style="width:80px;" /></td></tr></table><br>
+	<tr><td><label for="ingredient"><b>Ingrédients: </b></label></tr>
+	<tr><td><input name="ingredient1" id="ingredient" type="text" maxlength="255" placeholder="nom de l'ingrédient" required />
+	<input name="quantite1" type="number" min="0" placeholder="quantité" required style="width:80px;"/>
+	<input name="unite1" type="text" maxlength="255" placeholder="unité" style="width:80px;" /></td></tr></table><br>
 <input type="hidden" name="nb_ingredients" id="nb_ingredients" required value="1"/>
-<span onclick="nouvel_ingredient();">Ajouter un nouvel ingrédient</span><br />
+<span id="ajouter_ingredient" onclick="nouvel_ingredient2();">Ajouter un nouvel ingrédient</span><br />
 
 <input type="submit">
 
@@ -133,6 +134,45 @@ function nouvel_ingredient(){
 	document.getElementById("nb_ingredients").value = nb_ingredients;
 }
 
+
+
+function nouvel_ingredient2(){
+	nb_ingredients++;
+	var new_ingr = document.createElement('tr');
+	
+	var new_column1 = document.createElement('td');
+	
+	var new_nom_ingr = document.createElement('input');
+	new_nom_ingr.name = "ingredient" + nb_ingredients;
+	new_nom_ingr.type = "text";
+	new_nom_ingr.max_length = "255";
+	new_nom_ingr.placeholder = "nom de l'ingrédient";
+	new_nom_ingr.setAttribute("required","required");
+	
+	new_column1.appendChild(new_nom_ingr);
+	
+	var new_quantite = document.createElement('input');
+	new_quantite.name = "quantite" + nb_ingredients;
+	new_quantite.type = "number";
+	new_quantite.min = "0";
+	new_quantite.placeholder = "quantité";
+	new_quantite.style = "width:80px;";
+	new_quantite.setAttribute("required","required");
+	
+	new_column1.appendChild(new_quantite);
+	
+	var new_unite = document.createElement('input');
+	new_unite.name = "unite" + nb_ingredients;
+	new_unite.type = "text";
+	new_unite.maxlength = "255";
+	new_unite.style = "width:80px;";
+	
+	new_column1.appendChild(new_unite);
+	
+	new_ingr.appendChild(new_column1);
+	document.getElementById('list_ingredients').appendChild(new_ingr);
+	
+}
 
 </script>
 
