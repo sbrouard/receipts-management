@@ -95,9 +95,17 @@ value="<?php echo $rec['temps_cuiss'][3] , $rec['temps_cuiss'][4]; ?>" />min<br 
 <?php echo $rec['description']; ?></textarea><br />
 
 <table id="list_ingredients">
-	<tr><td><label for="ingredient"><b>Ingrédients: </b></label></td><td><input name="ingredient1" id="ingredient" type="text" maxlength="255" placeholder="nom de l'ingrédient" required />
-																		<input name="quantite1" type="number" min="0" placeholder="quantité" required style="width:80px;"/>
-																		<input name="unite1" type="text" maxlength="255" placeholder="unité" style="width:80px;" /></td></tr></table><br>
+	<tr><td><label for="ingredient"><b>Ingrédients: </b></label></td></tr>
+<?php	
+	$nb_ingr = -1;
+	for($nb_ingr = 1; $ingr=$ingredients->fetch();$nb_ingr++){
+		echo '<tr><td><input name="ingredient'. $nb_ingr .'" id="ingredient" type="text" maxlength="255" placeholder="nom de l\'ingrédient" required value="'. $ingr['nom_ingrédient'] .'"/>
+		<input name="quantite'. $nb_ingr .'" type="number" min="0" placeholder="quantité" required style="width:80px;"value="'. $ingr['valeur'] .'"/>
+		<input name="unite'. $nb_ingr .'" type="text" maxlength="255" placeholder="unité" style="width:80px;" value="'. $ingr['unite'] .'"/></td></tr></table><br>';
+	}
+?>
+	
+	
 <input type="hidden" name="nb_ingredients" id="nb_ingredients" required value="1"/>
 <span onclick="nouvel_ingredient();">Ajouter un nouvel ingrédient</span><br />
 
@@ -180,7 +188,7 @@ var nb_ingredients = 1;
 
 function nouvel_ingredient(){
 	nb_ingredients++;
-	document.getElementById('list_ingredients').innerHTML += '<tr><td></td><td><input name="ingredient' + nb_ingredients + '" type="text" maxlength="255" placeholder="nom de l\'ingrédient" required/>  <input name="quantite' + nb_ingredients + '" type="number" min="0" placeholder="quantité" required style="width:80px;"/>  <input name="unite' + nb_ingredients + '" type="text" maxlength="255" placeholder="unité" style="width:80px;" /></td></tr>';
+	document.getElementById('list_ingredients').innerHTML += '<tr><td><input name="ingredient' + nb_ingredients + '" type="text" maxlength="255" placeholder="nom de l\'ingrédient" required/>  <input name="quantite' + nb_ingredients + '" type="number" min="0" placeholder="quantité" required style="width:80px;"/>  <input name="unite' + nb_ingredients + '" type="text" maxlength="255" placeholder="unité" style="width:80px;" /></td></tr>';
 	document.getElementById("nb_ingredients").value = nb_ingredients;
 }
 
