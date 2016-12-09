@@ -63,7 +63,7 @@ if ($_SESSION['pseudo'] != $rec['pseudo']){
 	
 <h2> Modification de la recette</h2>
 
-<form method="post" action="./modifier_recette?id_recette=<?php echo $_GET['id_recette']; ?>">
+<form method="post" action="./modifier_recette.php?id_recette=<?php echo $_GET['id_recette']; ?>">
 	
 <label for="nom_recette"><b>Titre de la recette: </b></label><input name="nom_recette" id="nom_recette" type="text" maxlength="255" required="required"
 value="<?php echo $rec['nom_recette'];?>"/> <br />
@@ -108,9 +108,9 @@ value="<?php echo $rec['temps_cuiss'][3] , $rec['temps_cuiss'][4]; ?>" />min<br 
 	
 	
 <input type="hidden" name="nb_ingredients" id="nb_ingredients" required value="1"/>
-<span id="ajouter_ingredient" onclick="nouvel_ingredient2();">Ajouter un nouvel ingrédient</span><br />
+<span id="ajouter_ingredient" onclick="nouvel_ingredient2();">Ajouter un nouvel ingrédient</span><br /><br />
 
-<input type="submit">
+<input type="submit" value="Modifier" />
 
 </form>
 	
