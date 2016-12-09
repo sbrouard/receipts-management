@@ -48,7 +48,7 @@ while ($cat = $categories->fetch()){
 	<tr id="tr_ingredient1" ><td><input name="ingredient1" id="ingredient" type="text" maxlength="255" placeholder="nom de l'ingrédient" required />
 	<input name="quantite1" type="number" min="0" placeholder="quantité" required style="width:80px;"/>
 	<input name="unite1" type="text" maxlength="255" placeholder="unité" style="width:80px;" />
-	<img src="./images/icone_supprimer.png" height="30" class="icone_supprimer_ingredient" onclick="supprimer_ingredient(tr_ingredient1);"/></td></tr></table><br>
+	<img src="./images/icone_supprimer.png" height="30" class="icone_supprimer_ingredient" onclick="supprimer_ingredient('tr_ingredient1');"/></td></tr></table><br>
 <input type="hidden" name="nb_ingredients" id="nb_ingredients" required value="1"/>
 <span id="ajouter_ingredient" onclick="nouvel_ingredient2();">Ajouter un nouvel ingrédient</span><br />
 
@@ -175,7 +175,7 @@ function nouvel_ingredient2(){
 	icone.src = "./images/icone_supprimer.png";
 	icone.height = "30";
 	icone.className = "icone_supprimer_ingredient";
-	icone.addEventListener("click", function(){ supprimer_ingredient("tr_ingredient" + nb_ingredients)});
+	icone.addEventListener("click", function(){ supprimer_ingredient(new_ingr.id)});
 	
 	new_column1.appendChild(icone);
 
@@ -186,7 +186,9 @@ function nouvel_ingredient2(){
 }
 
 function supprimer_ingredient(id_tr_ingredient){
-	alert("coucou");
+	var row = document.getElementById(id_tr_ingredient);
+    row.parentNode.removeChild(row);
+    document.getElementById("nb_ingredients").value -= 1;
 }
 
 </script>
