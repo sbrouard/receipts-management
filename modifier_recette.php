@@ -102,7 +102,7 @@ value="<?php echo $rec['temps_cuiss'][3] , $rec['temps_cuiss'][4]; ?>" />min<br 
 		echo '<tr id="tr_ingredient'. $nb_ingr .'"><td><input name="ingredient'. $nb_ingr .'" id="ingredient" type="text" maxlength="255" placeholder="nom de l\'ingrédient" required value="'. $ingr['nom_ingrédient'] .'"/>
 		<input name="quantite'. $nb_ingr .'" type="number" min="0" placeholder="quantité" required style="width:80px;"value="'. $ingr['valeur'] .'"/>
 		<input name="unite'. $nb_ingr .'" type="text" maxlength="255" placeholder="unité" style="width:80px;" value="'. $ingr['unite'] .'"/>
-		<img src="./images/icone_supprimer.png" height="30" class="icone_supprimer_ingredient" onclick="supprimer_ingredient(tr_ingredient'. $nb_ingr .');"/></td></tr></table><br>';
+		<img src="./images/icone_supprimer.png" height="30" class="icone_supprimer_ingredient" onclick="supprimer_ingredient(\'tr_ingredient'. $nb_ingr .'\');"/></td></tr></table><br>';
 	}
 ?>
 	
@@ -185,7 +185,7 @@ else if($_SERVER['REQUEST_METHOD'] == 'POST'){
 	
 <!-- Fonction JS pour gérer le nombre d'ingrédients dans la recette -->	
 <script>
-var nb_ingredients = <?php echo $nb_ingr;?>
+var nb_ingredients = <?php echo $nb_ingr;?> -1;
 /*
 function nouvel_ingredient(){
 	nb_ingredients++;
@@ -195,7 +195,8 @@ function nouvel_ingredient(){
 */
 function nouvel_ingredient2(){
 	var new_ingr = document.createElement('tr');
-	new_ingr.id = "tr_ingredient" + nb_ingredients;
+	new_ingr.id = "tr_ingredient" + (nb_ingredients +1);
+	console.log(new_ingr.id);
 	
 	var new_column1 = document.createElement('td');
 	
@@ -231,7 +232,7 @@ function nouvel_ingredient2(){
 	icone.height = "30";
 	icone.className = "icone_supprimer_ingredient";
 	icone.id = "img" + nb_ingredients;
-	icone.addEventListener("click", function(){ supprimer_ingredient("tr_ingredient" + nb_ingredients)});
+	icone.addEventListener("click", function(){ console.log("tr_ingredient" + nb_ingredients);supprimer_ingredient(new_ingr.id);});
 	
 	new_column1.appendChild(icone);
 	
@@ -242,8 +243,10 @@ function nouvel_ingredient2(){
 	nb_ingredients++;
 }
 
-function supprimer_ingredient(id_tr_ingredient){
-	alert("coucou");
+function supprimer_ingredient(id_tr_ingredient){	
+	var row = document.getElementById(id_tr_ingredient);
+    row.parentNode.removeChild(row);
+
 }
 
 </script>
