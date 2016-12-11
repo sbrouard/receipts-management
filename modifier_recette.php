@@ -14,6 +14,70 @@ if(!isset($_GET['id_recette']) || !isset($_SESSION['pseudo'])){
 
 
 
+
+
+
+// traitement du formulaire
+$requette_executee = 0;
+if(isset($_POST['nom_recette']) && isset($_POST['categorie']) && isset($_POST['nb_personnes']) 
+	&& isset($_POST['hpreparation']) && isset($_POST['minpreparation']) && isset($_POST['hcuisson']) && isset($_POST['mincuisson'])
+	&& isset($_POST['description']) && isset($_POST['nb_ingredients']) && ($_POST['nb_ingredients'] >= 1)){
+	
+	$temps_preparation = $_POST['hpreparation'] . ':' . $_POST['minpreparation'] . ':00';
+	$temps_cuisson = $_POST['hcuisson'] . ':' . $_POST['mincuisson'] . ':00';
+	
+// mettre à jour dans Recettes de cuisine
+	$bdd->exec('UPDATE Recettes_de_cuisine SET nom_recette = "' . $_POST['nom_recette'] . '",
+											   nombre_personnes = "' . $_POST['nb_personnes'] .'",
+										       temps_preparation = "' . $temps_preparation .'",
+											   temps_cuisson = "' . $temps_cuisson . '"
+										   WHERE id_recette = "'. $_GET['id_recette'] .'"');
+
+	
+// modifier dans Descriptions
+
+	$bdd->exec('UPDATE Descriptions SET date_fin = CURRENT_DATE WHERE date_fin = "0000-00-00" AND id_recette = "'. $_GET['id_recette'] .'"');
+	$bdd->exec('INSERT INTO Descriptions(date_debut,date_fin,texte,id_recette) VALUES(CURRENT_DATE, "0000-00-00","' . $_POST['description'] . '", ' . $_GET['id_recette'] . ')');
+
+
+
+
+
+	for($i = 1; $i < $_POST['nb_ingredients']+1;$i++){
+		
+		if(isset($_POST['ingredient' . $i])){
+			$test_exists = $bdd->query('SELECT EXISTS (SELECT * FROM Ingredients WHERE nom_ingredient = "' . $_POST['ingredient' . $i] . '") AS ingredient_exists');
+			$exists = $test_exists->fetch();
+			if(!$exists['ingredient_exists']){ // Si l'ingredient n'est pas deja dans la base, on le rajoute
+				$bdd->exec('INSERT INTO Ingredients(nom_ingredient) Values("' . $_POST['ingredient' . $i] .'")');
+			}
+			
+			// inserer dans Contenir Ingredients
+			
+			//$bdd->exec('INSERT INTO Contenir_ingredients(unite,valeur,id_recette,nom_ingrédient) VALUES("' . $_POST['unite' . $i] . '","' . $_POST['quantite' . $i] . '","' . $recette_id .'", "' . $_POST['ingredient' . $i] .'")'); 
+		}
+	}
+	
+	
+	// Modifieer dans appartenir_categorie
+	
+	$bdd->exec('UPDATE Appartenir_catégorie SET nom_catégorie = "'. $_POST['categorie'] .'" WHERE id_recette = "'. $_GET['id_recette'] .'"');
+	
+		$requete_executee = 1;
+}
+else if($_SERVER['REQUEST_METHOD'] == 'POST'){
+	$requette_executee = -1;
+}	
+	
+
+
+
+
+
+
+
+
+
 // On récupère le contenu de la recette dans la table Recettes_de cuisine
 $recettes = $bdd->query('SELECT R.id_recette, nom_recette, 
 						DATE_FORMAT(date_ajout, \'%d/%m/%Y\') AS date_ajout_fr, 
@@ -28,7 +92,7 @@ $recettes = $bdd->query('SELECT R.id_recette, nom_recette,
 								temps_cuisson,
 								texte,
 								id_internaute
-						 FROM Recettes_de_cuisine AS R1 INNER JOIN Descriptions D ON R1.id_recette = D.id_recette) AS R INNER JOIN Internaute AS I ON R.id_internaute = I.id_internaute
+						 FROM Recettes_de_cuisine AS R1 INNER JOIN (SELECT * FROM Descriptions WHERE date_fin = "0000-00-00") D ON R1.id_recette = D.id_recette ) AS R INNER JOIN Internaute AS I ON R.id_internaute = I.id_internaute
 						WHERE R.id_recette =' . $_GET['id_recette']);
 						
 // On récupère les informations de la recette						
@@ -68,12 +132,18 @@ if ($_SESSION['pseudo'] != $rec['pseudo']){
 <label for="nom_recette"><b>Titre de la recette: </b></label><input name="nom_recette" id="nom_recette" type="text" maxlength="255" required="required"
 value="<?php echo $rec['nom_recette'];?>"/> <br />
 
+
+<?php $categorie = $bdd->query('SELECT nom_catégorie FROM Appartenir_catégorie WHERE id_recette = "'. $_GET['id_recette'] .'"');
+$categ = $categorie->fetch();
+?>
 <label for="categorie"><b>Catégorie de la recette: </b></label>
 <select name="categorie" id="categorie">
 <?php
 $categories = $bdd->query('SELECT * FROM Categories WHERE nom_categorie != \'Autre\'');
 while ($cat = $categories->fetch()){
-	echo "<option value='" . $cat['nom_categorie']. "'>" . $cat['nom_categorie']. "</option>";
+	echo "<option value='" . $cat['nom_categorie']. "'";
+	if ($cat['nom_categorie'] == $categ['nom_catégorie']) echo "selected";
+	echo ">" . $cat['nom_categorie'] . "</option>";
 	}
 ?>
 <option value="NULL">Autre catégorie</option>
@@ -117,65 +187,24 @@ value="<?php echo $rec['temps_cuiss'][3] , $rec['temps_cuiss'][4]; ?>" />min<br 
 	
 	
 	
-	
 <?php
-// ajout des recettes dans la base de donnée
-if(isset($_POST['nom_recette']) && isset($_POST['categorie']) && isset($_POST['nb_personnes']) 
-	&& isset($_POST['hpreparation']) && isset($_POST['hcuisson']) && isset($_POST['mincuisson'])
-	&& isset($_POST['description']) && isset($_POST['nb_ingredients']) && ($_POST['nb_ingredients'] >= 1)){
-	
-	$temps_preparation = $_POST['hpreparation'] . ':' . $_POST['minpreparation'] . ':00';
-	$temps_cuisson = $_POST['hcuisson'] . ':' . $_POST['mincuisson'] . ':00';
-	
-// inserer dans Recettes de cuisine
-	$bdd->exec('INSERT INTO Recettes_de_cuisine(nom_recette,date_ajout,nombre_personnes,temps_preparation,temps_cuisson,id_internaute) 
-										VALUES("' . $_POST['nom_recette'] . '",
-												CURRENT_DATE, "' . $_POST['nb_personnes'] .'",
-												"' . $temps_preparation .'","' . $temps_cuisson . '",
-												(SELECT id_internaute FROM Internaute WHERE pseudo="' . $_SESSION['pseudo'] .'"))');
-	
-	//$recette_id =$bdd->query('SELECT LAST_INSERT_ID()');
-	$recette_id=$bdd->lastInsertId();
-// inserer dans Descriptions
 
-	$bdd->exec('INSERT INTO Descriptions(date_debut,date_fin,texte,id_recette) VALUES(CURRENT_DATE, "0000-00-00","' . $_POST['description'] . '", 
-	' . $recette_id . ')');
+// Affichage du résultat du traitement du formulaire
 
-// inserer dans ingredients si abstent
+if(isset($requete_executee) && $requete_executee == 1)
+	echo "La recette a été modifiée avec succes<br>";
+else if(isset($requete_executee) && $requete_executee == -1)
+	echo "Veuillez remplir tous les champs<br>";
 
-// inserer dans Contenir Ingredients
-
-	for($i = 1; $i < $_POST['nb_ingredients']+1;$i++){
-		
-		if(isset($_POST['ingredient' . $i])){
-			$test_exists = $bdd->query('SELECT EXISTS (SELECT * FROM Ingredients WHERE nom_ingredient = "' . $_POST['ingredient' . $i] . '") AS ingredient_exists');
-			$exists = $test_exists->fetch();
-			if(!$exists['ingredient_exists']){ // Si l'ingredient n'est pas deja dans la base, on le rajoute
-				$bdd->exec('INSERT INTO Ingredients(nom_ingredient) Values("' . $_POST['ingredient' . $i] .'")');
-			}
-			$bdd->exec('INSERT INTO Contenir_ingredients(unite,valeur,id_recette,nom_ingrédient) VALUES("' . $_POST['unite' . $i] . '","' . $_POST['quantite' . $i] . '","' . $recette_id .'", "' . $_POST['ingredient' . $i] .'")'); 
-		}
-	}
-	
-	
-	// Insérer dans appartenir_categorie
-	
-	$bdd->exec('INSERT INTO Appartenir_catégorie(nom_catégorie,id_recette) VALUES("' . $_POST['categorie'] .'","' . $recette_id .'")');
-	
-	
-		echo "Recette ajoutée !<br>";
-}
-else if($_SERVER['REQUEST_METHOD'] == 'POST'){
-	echo "Veuillez compléter tous les champs<br>";
-}
-	
-	
-
-
-	
-	
-	
 ?>
+	
+	
+	
+	
+	
+	
+	
+
 	
 	
 	
