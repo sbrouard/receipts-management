@@ -135,7 +135,7 @@ text-align: center;
 font-weight: bold;
 }
 
-.comment{
+.comment, .desc_encadre{
 
     border: 2px black solid;
     width: 600px;
@@ -147,5 +147,7 @@ font-weight: bold;
 	text-decoration:underline;
 	cursor:pointer;
 }
+
+
 
 
