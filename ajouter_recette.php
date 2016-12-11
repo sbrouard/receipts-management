@@ -31,7 +31,7 @@ while ($cat = $categories->fetch()){
 	echo "<option value='" . $cat['nom_categorie']. "'>" . $cat['nom_categorie']. "</option>";
 	}
 ?>
-<option value="NULL">Autre catégorie</option>
+<option value="Autre">Autre catégorie</option>
 </select><br />
 
 <label for="nb_personnes"><b>Recette pour combien de personnes: </b></label><input name="nb_personnes" id="nb_personnes" type="number" min="1" required="required"/> <br />
@@ -101,7 +101,6 @@ if(isset($_POST['nom_recette']) && isset($_POST['categorie']) && isset($_POST['n
 	
 	
 	// Insérer dans appartenir_categorie
-	
 	$bdd->exec('INSERT INTO Appartenir_catégorie(nom_catégorie,id_recette) VALUES("' . $_POST['categorie'] .'","' . $recette_id .'")');
 	
 	
@@ -139,6 +138,8 @@ function nouvel_ingredient(){
 
 function nouvel_ingredient2(){
 	nb_ingredients++;
+	document.getElementById("nb_ingredients").value = nb_ingredients;
+
 	var new_ingr = document.createElement('tr');
 	new_ingr.id = "tr_ingredient" + nb_ingredients;
 	
