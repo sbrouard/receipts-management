@@ -53,13 +53,17 @@ if(isset($_POST['nom_recette']) && isset($_POST['categorie']) && isset($_POST['n
 			}
 			
 			// inserer dans Contenir Ingredients
-			
-			//$bdd->exec('INSERT INTO Contenir_ingredients(unite,valeur,id_recette,nom_ingrédient) VALUES("' . $_POST['unite' . $i] . '","' . $_POST['quantite' . $i] . '","' . $recette_id .'", "' . $_POST['ingredient' . $i] .'")'); 
+			if (isset($_POST['id_ingredient' . $i]) && !empty($_POST['id_ingredient' . $i])){
+				$bdd->exec('UPDATE Contenir_ingredients SET nom_ingrédient = "'. $_POST['ingredient'. $i] .'", valeur = "'. $_POST['quantite' . $i].'", unite = "'. $_POST['unite' . $i] .'" WHERE  nom_ingrédient = "'. $_POST['id_ingredient'. $i] .'" AND id_recette = "'. $_GET['id_recette'] .'"');
+			}
+			else{
+				$bdd->exec('INSERT INTO Contenir_ingredients(unite,valeur,id_recette,nom_ingrédient) VALUES("' . $_POST['unite' . $i] . '","' . $_POST['quantite' . $i] . '","' . $_GET['id_recette'] .'", "' . $_POST['ingredient' . $i] .'")'); 
+			}
 		}
 	}
 	
 	
-	// Modifieer dans appartenir_categorie
+	// Modifier dans appartenir_categorie
 	
 	$bdd->exec('UPDATE Appartenir_catégorie SET nom_catégorie = "'. $_POST['categorie'] .'" WHERE id_recette = "'. $_GET['id_recette'] .'"');
 	
@@ -142,7 +146,7 @@ $categ = $categorie->fetch();
 $categories = $bdd->query('SELECT * FROM Categories WHERE nom_categorie != \'Autre\'');
 while ($cat = $categories->fetch()){
 	echo "<option value='" . $cat['nom_categorie']. "'";
-	if ($cat['nom_categorie'] == $categ['nom_catégorie']) echo "selected";
+	if ($cat['nom_categorie'] == $categ['nom_catégorie']) echo " selected";
 	echo ">" . $cat['nom_categorie'] . "</option>";
 	}
 ?>
@@ -170,12 +174,13 @@ value="<?php echo $rec['temps_cuiss'][3] , $rec['temps_cuiss'][4]; ?>" />min<br 
 	$nb_ingr = 0;
 	for($nb_ingr = 1; $ingr=$ingredients->fetch();$nb_ingr++){
 		echo '<tr id="tr_ingredient'. $nb_ingr .'"><td><input name="ingredient'. $nb_ingr .'" id="ingredient" type="text" maxlength="255" placeholder="nom de l\'ingrédient" required value="'. $ingr['nom_ingrédient'] .'"/>
-		<input name="quantite'. $nb_ingr .'" type="number" min="0" placeholder="quantité" required style="width:80px;"value="'. $ingr['valeur'] .'"/>
+		<input name="quantite'. $nb_ingr .'" type="number" min="0" placeholder="quantité" required style="width:80px;" value="'. $ingr['valeur'] .'"/>
 		<input name="unite'. $nb_ingr .'" type="text" maxlength="255" placeholder="unité" style="width:80px;" value="'. $ingr['unite'] .'"/>
-		<img src="./images/icone_supprimer.png" height="30" class="icone_supprimer_ingredient" onclick="supprimer_ingredient(\'tr_ingredient'. $nb_ingr .'\');"/></td></tr></table><br>';
+		<img src="./images/icone_supprimer.png" height="30" class="icone_supprimer_ingredient" onclick="supprimer_ingredient(\'tr_ingredient'. $nb_ingr .'\');"/>
+		<input name="id_ingredient'. $nb_ingr .'" type="hidden" value="'. $ingr['nom_ingrédient'] .'"/></td></tr>';
 	}
 ?>
-	
+</table><br />
 	
 <input type="hidden" name="nb_ingredients" id="nb_ingredients" required value="1"/>
 <span id="ajouter_ingredient" onclick="nouvel_ingredient2();">Ajouter un nouvel ingrédient</span><br /><br />
@@ -230,7 +235,7 @@ function nouvel_ingredient2(){
 	var new_column1 = document.createElement('td');
 	
 	var new_nom_ingr = document.createElement('input');
-	new_nom_ingr.name = "ingredient" + nb_ingredients;
+	new_nom_ingr.name = "ingredient" + (nb_ingredients +1);
 	new_nom_ingr.type = "text";
 	new_nom_ingr.max_length = "255";
 	new_nom_ingr.placeholder = "nom de l'ingrédient";
@@ -239,7 +244,7 @@ function nouvel_ingredient2(){
 	new_column1.appendChild(new_nom_ingr);
 	
 	var new_quantite = document.createElement('input');
-	new_quantite.name = "quantite" + nb_ingredients;
+	new_quantite.name = "quantite" + (nb_ingredients +1);
 	new_quantite.type = "number";
 	new_quantite.min = "0";
 	new_quantite.placeholder = "quantité";
@@ -249,7 +254,7 @@ function nouvel_ingredient2(){
 	new_column1.appendChild(new_quantite);
 	
 	var new_unite = document.createElement('input');
-	new_unite.name = "unite" + nb_ingredients;
+	new_unite.name = "unite" + (nb_ingredients +1);
 	new_unite.type = "text";
 	new_unite.maxlength = "255";
 	new_unite.style = "width:80px;";
@@ -260,7 +265,7 @@ function nouvel_ingredient2(){
 	icone.src = "./images/icone_supprimer.png";
 	icone.height = "30";
 	icone.className = "icone_supprimer_ingredient";
-	icone.id = "img" + nb_ingredients;
+	icone.id = "img" + (nb_ingredients +1);
 	icone.addEventListener("click", function(){ console.log("tr_ingredient" + nb_ingredients);supprimer_ingredient(new_ingr.id);});
 	
 	new_column1.appendChild(icone);
@@ -270,6 +275,7 @@ function nouvel_ingredient2(){
 	
 	
 	nb_ingredients++;
+	document.getElementById("nb_ingredients").value = nb_ingredients;
 }
 
 function supprimer_ingredient(id_tr_ingredient){	
