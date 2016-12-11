@@ -84,12 +84,12 @@ $descriptions = $bdd->query('SELECT id_description, texte,
 							DATE_FORMAT(date_debut, \'%d/%m/%Y\') AS debut_description,
 							DATE_FORMAT(date_fin, \'%d/%m/%Y\') AS fin_description
 							FROM Descriptions WHERE	id_recette='.$_GET['id_recette'].
-							' ORDER BY date_debut DESC');
+							' ORDER BY date_debut DESC, id_description DESC');
 if($description_actuelle = $descriptions->fetch()){
-	echo '<br><span id= "gras" >Consignes actuelles de préparation de la recette</span> (écrit le '.$description_actuelle['debut_description']. ') : <br>' .$description_actuelle['texte'].'<br><br>';
+	echo '<br><div class="desc_encadre"><span id= "gras" >Consignes actuelles de préparation de la recette</span> (écrit le '.$description_actuelle['debut_description']. ') : <br>' .$description_actuelle['texte'].'</div><br><br>';
 }
 else{
-	echo '<br><span id= "gras" >Consignes actuelles de préparation de la recette</span>: Aucune description n\'est fournie pour cette recette<br>';
+	echo '<br><div class="desc_encadre"><span id= "gras" >Consignes actuelles de préparation de la recette</span>: Aucune description n\'est fournie pour cette recette</div><br>';
 }
 
 
@@ -98,10 +98,10 @@ if(isset($_GET['anciennes_descriptions']) && !empty($_GET['anciennes_description
 	$compteur_fetch = 0;
 	while($description = $descriptions->fetch()){
 		$compteur_fetch += 1;
-		echo '<br>Description du '.$description['debut_description']. ' au '.$description['fin_description'].' : <br>' .$description['texte'].'<br>';
+		echo '<br><div class="desc_encadre">Description du '.$description['debut_description']. ' au '.$description['fin_description'].' : <br>' .$description['texte'].'</div><br>';
 	}
 	if($compteur_fetch == 0){
-		echo '<br> Aucune autre description <br>';
+		echo '<br> <div class="desc_encadre">Aucune autre description</div><br>';
 	}
 }
 else{
