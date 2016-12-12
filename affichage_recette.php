@@ -4,7 +4,13 @@
 
 <html>
 
-<?php include("head_html.php"); ?>
+<?php include("head_html.php"); 
+// traitement suppression recette
+if(isset($_POST['suppression']) && $_POST['suppression'] == true){
+	$bdd->exec('DELETE FROM Recettes_de_cuisine where id_recette='.$_GET['id_recette']);
+	header('Location: liste_recettes.php');
+}
+?>
 
 <body>
 <?php include("table_matieres.php"); ?>
@@ -282,6 +288,12 @@ if(!$already_comment && isset($_SESSION) && !empty($_SESSION)){
 // Lien vers la modification de la recette si l'utilisateur connecté est le créateur de la recette
 if(isset($_SESSION['pseudo']) && $rec['pseudo'] == $_SESSION['pseudo']){
 	echo '<br><br><a href="modifier_recette.php?id_recette='.$_GET['id_recette'].'"	>Modifier ma recette</a><br><br>';
+	echo '<form method="post" action="./affichage_recette.php?id_recette='.$_GET['id_recette'].'" onsubmit="return confirm(\'Etes-vous sur de votre choix ?\');">
+	<input type="hidden" name="suppression" id="suppression" value="true" />
+	<br>
+	<input type="submit" value="Supprimer la recette">
+	</form>';
+	
 }
 
 ?>
