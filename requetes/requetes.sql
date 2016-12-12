@@ -508,5 +508,47 @@ DELETE FROM Menu where id_menu=3;
 
 
 
+-----------------------------------------------------------------------------------------------
+-- Sélectionner les recettes sucré-salé
+--
+SELECT DISTINCT RCS.id_recette, nom_recette 
+FROM (Recettes_de_cuisine RCS INNER JOIN Contenir_ingredients C1 ON RCS.id_recette = C1.id_recette) 
+     INNER JOIN Contenir_ingredients C2 
+     ON C1.id_recette = C2.id_recette 
+WHERE C1.nom_ingrédient = "miel"
+AND C2.nom_ingrédient="sel";
 
 
+
+-----------------------------------------------------------------------------------------------
+-- Sélectionner les recettes TOP (notées par plus de 5 internautes à 3)
+--
+SELECT RCT.id_recette,nom_recette, COUNT(N.id_recette) AS c 
+FROM Recettes_de_cuisine RCT INNER JOIN Noter N 
+ON RCT.id_recette = N.id_recette 
+WHERE N.valeur = 3 GROUP BY N.id_recette HAVING c > 5;
+
+
+
+
+-----------------------------------------------------------------------------------------------
+-- Sélectionner les recettes communes
+-- (apparaissent dans au moins 3 menus, ont plus de 10 notes et 3 commentaires)
+--
+SELECT M.id_recette,M.nom_recette 
+FROM (SELECT R1.id_recette,nom_recette, COUNT(M1.id_recette) AS nb_menus 
+     	     FROM Recettes_de_cuisine R1, Contenir_recette M1 
+     	     WHERE R1.id_recette = M1.id_recette 
+     	     GROUP BY M1.id_recette HAVING nb_menus > 2) AS M 
+     INNER JOIN 
+      (SELECT N.id_recette,N.nom_recette FROM (SELECT R2.id_recette,nom_recette, COUNT(N2.id_recette) AS nb_notes 
+      	      				      FROM Recettes_de_cuisine R2, Noter N2 
+					      WHERE R2.id_recette = N2.id_recette 
+					      GROUP BY N2.id_recette HAVING nb_notes > 9) AS N 
+      	      INNER JOIN 
+	      (SELECT R3.id_recette,nom_recette, COUNT(C3.id_recette) AS nb_com 
+	      	      FROM Recettes_de_cuisine R3, Commenter C3 
+		      WHERE R3.id_recette = C3.id_recette 
+		      GROUP BY C3.id_recette HAVING nb_com > 2) AS C
+	      ON N.id_recette = C.id_recette) AS L
+     ON M.id_recette = L.id_recette;

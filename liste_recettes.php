@@ -76,10 +76,10 @@ $sous_req1 = '';
 
 //if(isset($_GET['sucre_sale']) && $_GET['sucre_sale'] == true){
 if(isset($_POST['sucre_sale']) && $_POST['sucre_sale'] == true){
-	$sucre_sale = 'SELECT RCS.id_recette,nom_recette FROM Recettes_de_cuisine RCS, Contenir_ingredients C1, Contenir_ingredients C2 WHERE RCS.id_recette = C1.id_recette = C2.id_recette AND C1.nom_ingrédient = "miel"';
+	$sucre_sale = 'SELECT RCS.id_recette,nom_recette FROM Recettes_de_cuisine RCS, Contenir_ingredients C1, Contenir_ingredients C2 WHERE RCS.id_recette = C1.id_recette = C2.id_recette AND C1.nom_ingrédient = "miel" AND C2.nom_ingrédient="sel"';
 }
 if(isset($_POST['top']) && $_POST['top'] == true){
-	$top = 'SELECT RCT.id_recette,nom_recette, COUNT(N.id_recette) AS c FROM Recettes_de_cuisine RCT, Noter N WHERE RCT.id_recette = N.id_recette AND N.valeur = 3 GROUP BY N.id_recette HAVING c > 2';
+	$top = 'SELECT RCT.id_recette,nom_recette, COUNT(N.id_recette) AS c FROM Recettes_de_cuisine RCT, Noter N WHERE RCT.id_recette = N.id_recette AND N.valeur = 3 GROUP BY N.id_recette HAVING c > 5';
 }
 if(isset($_POST['commune']) && $_POST['commune'] == true){
 	$com_menus = 'SELECT R1.id_recette,nom_recette, COUNT(M1.id_recette) AS nb_menus FROM Recettes_de_cuisine R1, Contenir_recette M1 WHERE R1.id_recette = M1.id_recette GROUP BY M1.id_recette HAVING nb_menus > 2';
