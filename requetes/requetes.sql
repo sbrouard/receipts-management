@@ -402,3 +402,111 @@ WHERE R.id_recette = 3;
 SELECT nom_catégorie FROM Appartenir_catégorie WHERE id_recette = 3;
 
 
+
+
+
+-----------------------------------------------------------------------------------------------
+-- Sélectionner toutes les recettes de la catégorie "Dessert"
+--
+SELECT Recettes_de_cuisine.id_recette AS id_recette, 
+       nom_recette 
+FROM Recettes_de_cuisine INNER JOIN Appartenir_catégorie 
+ON Recettes_de_cuisine.id_recette = Appartenir_catégorie.id_recette 
+WHERE Appartenir_catégorie.nom_catégorie = "Dessert";
+
+
+
+
+-----------------------------------------------------------------------------------------------
+-- Insérer un nouveau menu créé par l'internaute 6
+--
+INSERT INTO Menu(nom_menu,id_internaute) VALUES("nom du nouveau menu", 6);
+
+
+
+
+-----------------------------------------------------------------------------------------------
+-- Ajouter la recette 3 dans le menu 5
+--
+INSERT INTO Contenir_recette(id_recette,id_menu) VALUES(3,5);
+
+
+
+
+-----------------------------------------------------------------------------------------------
+-- Ajouter une nouvelle recette associée à un utilisateur particulier
+--
+INSERT INTO Recettes_de_cuisine(nom_recette,date_ajout,nombre_personnes,temps_preparation,temps_cuisson,id_internaute) 
+VALUES("nom de la nouvelle recette", CURRENT_DATE, 10,"00:35:00","00:15:00",
+(SELECT id_internaute FROM Internaute WHERE pseudo="polochon"));
+
+
+
+
+-----------------------------------------------------------------------------------------------
+-- Ajouter un nouvel ingrédient en minuscules dans la base
+--
+INSERT INTO Ingredients(nom_ingredient) Values(LOWER("Epinards"));
+
+
+
+
+-----------------------------------------------------------------------------------------------
+-- Sélectionner le nom d'un menu à partir de son identifiant
+--
+SELECT M.id_menu, M.nom_menu, I.pseudo 
+FROM Menu AS M INNER JOIN Internaute AS I 
+ON M.id_internaute = I.id_internaute
+WHERE id_menu =3;
+
+
+
+
+-----------------------------------------------------------------------------------------------
+-- Sélectionner la liste des catégories des recettes du menu 3
+--
+SELECT DISTINCT nom_catégorie 
+FROM (Recettes_de_cuisine AS R INNER JOIN Appartenir_catégorie AS A 
+     ON R.id_recette = A.id_recette) 
+     	INNER JOIN Contenir_recette AS C
+	ON R.id_recette = C.id_recette
+WHERE C.id_menu =3;
+
+
+
+
+-----------------------------------------------------------------------------------------------
+-- Sélectionner les recettes du menu 3 et de la catégorie "Dessert"
+--
+SELECT R.id_recette, R.nom_recette 
+FROM (Recettes_de_cuisine AS R INNER JOIN Contenir_recette AS C
+     ON R.id_recette = C.id_recette) 
+     	INNER JOIN Appartenir_catégorie AS A 
+	ON R.id_recette = A.id_recette 
+WHERE A.nom_catégorie = "Dessert" AND C.id_menu =3;
+
+
+
+
+
+-----------------------------------------------------------------------------------------------
+-- Sélectionner le pseudo de l'internaute ayant créé le menu 3
+--
+SELECT DISTINCT pseudo 
+FROM Menu INNER JOIN Internaute 
+ON Menu.id_internaute = Internaute.id_internaute 
+WHERE id_menu=3;
+
+
+
+
+-----------------------------------------------------------------------------------------------
+-- Supprimer le menu 3
+--
+DELETE FROM Menu where id_menu=3;
+
+
+
+
+
+
