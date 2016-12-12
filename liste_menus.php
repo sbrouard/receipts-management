@@ -39,7 +39,12 @@ if(isset($_POST['date']) && !empty($_POST['date'])){
 			echo "Cette date n'existe pas";
 		}
 		else{
-			$menus = $bdd->query('SELECT id_menu,nom_menu FROM Menu WHERE id_menu NOT IN (SELECT M.id_menu FROM Menu M,Contenir_recette C, Recettes_de_cuisine R WHERE R.date_ajout < "' . $date_sql[2] .'-'. $date_sql[1] .'-'. $date_sql['0'] .'" AND R.id_recette = C.id_recette AND C.id_menu= M.id_menu)  AND id_menu IN (SELECT id_menu FROM Contenir_recette) ');
+			$menus = $bdd->query('SELECT id_menu,nom_menu FROM Menu 
+								WHERE id_menu NOT IN 
+								(SELECT M.id_menu FROM Menu M,Contenir_recette C, Recettes_de_cuisine R 
+								WHERE R.date_ajout < "' . $date_sql[2] .'-'. $date_sql[1] .'-'. $date_sql['0'] .'" 
+								AND R.id_recette = C.id_recette AND C.id_menu= M.id_menu)  
+								AND id_menu IN (SELECT id_menu FROM Contenir_recette) ');
 
 			while ($men = $menus->fetch()){
 				echo '<p> <a href="affichage_menu.php?id_menu='.$men['id_menu'].'">'. $men['nom_menu'].'</a> </p>';
