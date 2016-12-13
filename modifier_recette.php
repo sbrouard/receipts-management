@@ -71,7 +71,7 @@ if(isset($_POST['nom_recette']) && isset($_POST['categorie']) && isset($_POST['n
 }
 else if($_SERVER['REQUEST_METHOD'] == 'POST'){
 	$requette_executee = -1;
-}	
+}
 	
 
 
@@ -101,7 +101,7 @@ $recettes = $bdd->query('SELECT R.id_recette, nom_recette,
 						
 // On récupère les informations de la recette						
 $rec = $recettes->fetch();
-
+echo $rec['nom_recette'];
 // On récupère les ingrédients et leurs unités
 $ingredients = $bdd->query('SELECT *
 							FROM Contenir_ingredients 
@@ -112,7 +112,6 @@ if ($_SESSION['pseudo'] != $rec['pseudo']){
 	header('Location: index.php');	
 	exit();
 }
-
 ?>
 
 
