@@ -49,7 +49,7 @@ while($cat = $categories->fetch()){
 ?>
 /> <br />
 <label for="commune">Sélectionner seulement les recettes les plus utilisées</label><input type="checkbox" name="commune" id="commune" 
-<?php if(isset($_POST['commune']) && $_POST['communes'] == true)
+<?php if(isset($_POST['commune']) && $_POST['commune'] == true)
 	echo " checked";
 ?>
 /> <br />
@@ -76,7 +76,7 @@ $sous_req1 = '';
 
 //if(isset($_GET['sucre_sale']) && $_GET['sucre_sale'] == true){
 if(isset($_POST['sucre_sale']) && $_POST['sucre_sale'] == true){
-	$sucre_sale = 'SELECT RCS.id_recette,nom_recette FROM Recettes_de_cuisine RCS, Contenir_ingredients C1, Contenir_ingredients C2 WHERE RCS.id_recette = C1.id_recette = C2.id_recette AND C1.nom_ingrédient = "miel" AND C2.nom_ingrédient="sel"';
+	$sucre_sale = 'SELECT RCS.id_recette,nom_recette FROM Recettes_de_cuisine RCS, Contenir_ingredients C1, Contenir_ingredients C2 WHERE RCS.id_recette = C1.id_recette = C2.id_recette AND C1.nom_ingrédient = "miel"';// AND C2.nom_ingrédient="sel"';
 }
 if(isset($_POST['top']) && $_POST['top'] == true){
 	$top = 'SELECT RCT.id_recette,nom_recette, COUNT(N.id_recette) AS c FROM Recettes_de_cuisine RCT, Noter N WHERE RCT.id_recette = N.id_recette AND N.valeur = 3 GROUP BY N.id_recette HAVING c > 5';
@@ -94,7 +94,7 @@ if(isset($_POST['commune']) && $_POST['commune'] == true){
 					ON N.id_recette = C.id_recette) AS L
 				ON M.id_recette = L.id_recette';
 }
-
+echo $commune;
 
 //Stockage des requettes dans des variables indépendantes de la requete
 	
@@ -235,6 +235,10 @@ $recettes = $bdd->query($requette);
 // affichage du résultat ligne par ligne sous forme de lien
 while ($rec = $recettes->fetch()){
 	echo '<p> <a href="affichage_recette.php?id_recette='.$rec['id_recette'].'">'. $rec['nom_recette'].'</a> </p>';
+	
+	if(isset($_POST['sucre_sale']) && $_POST['sucre_sale'] == true){
+		$recettes->fetch();
+	}
 }
 
 
