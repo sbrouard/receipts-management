@@ -1,0 +1,15 @@
+Ne pas s'inscrire avec un pseudo déjà existant
+----------------------------------------------
+
+DELIMITER //
+CREATE TRIGGER VERIF_PSEUDO 
+AFTER INSERT ON `Internaute`
+FOR EACH ROW 
+BEGIN 
+      IF (`NEW.pseudo` IN (SELECT `pseudo` FROM `Internaute` WHERE `id_internaute` <> `NEW.id_internaute`)) THEN 
+      	 DELETE FROM `Internaute` WHERE `id_internaute` = `NEW.id_internaute`; 
+	 END IF;
+END 
+//
+;
+
