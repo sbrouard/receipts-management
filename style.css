@@ -148,6 +148,9 @@ font-weight: bold;
 	cursor:pointer;
 }
 
-
+.icone_supprimer_ingredient{
+	position:relative;
+	top:7px;
+}
 
 
