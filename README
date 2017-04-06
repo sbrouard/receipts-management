@@ -1,3 +1,20 @@
+This project, which was conducted in only few weeks, is the conception of database made in order to manage cooking recipes, its ingredients, users, etc.
+Several requests were created with Mysql to insert/update/remove/collect datas.
+We finally added an interface using PHP, even if it wasn't the initial aim of the project.
+
+This website run on a local server, you can see the result only from the ENSEIRB-MATMECA's network on:
+https://maegrondin.vvvpedago.enseirb-matmeca.fr/SGBD/
+
+
+
+
+
+
+
+
+---------------------------------------------------------------------------------------
+
+
 Fichier d'importation de la base de données: "base.sql"
 
 
